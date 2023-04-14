@@ -1,0 +1,40 @@
+{
+    "include": [
+        "apr",
+        "apr-util",
+        "distrobox",
+        "ffmpeg",
+        "ffmpeg-libs",
+        "fzf",
+        "htop",
+        "intel-media-driver",
+        "just",
+        "kernel-devel-matched",
+        "libratbag-ratbagd",
+        "libva-intel-driver",
+        "libva-utils",
+        "mesa-va-drivers-freeworld",
+        "nvme-cli",
+        "nvtop",
+        "openssl",
+        "pipewire-codec-aptx",
+        "smartmontools",
+        "vim",
+        "zstd",
+        "ffmpegthumbnailer",
+        "gnome-tweaks"
+        ],
+     "exclude": [
+        "libavcodec-free",
+        "libavdevice-free",
+        "libavfilter-free",
+        "libavformat-free",
+        "libavutil-free",
+        "libpostproc-free",
+        "libswresample-free",
+        "libswscale-free",
+        "mesa-va-drivers",
+        "firefox",
+        "firefox-langpacks"
+     ]
+}
