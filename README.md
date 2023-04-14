@@ -1,4 +1,7 @@
-# Silverblue-OS
+# Cloud-OS
+
+[![License](https://img.shields.io/badge/license-Apache2-brightgreen.svg)](LICENSE)
+[![wakatime](https://wakatime.com/badge/user/173067c8-7ded-4cfb-8605-b3032659c00c/project/2500ba3a-f747-4893-b70e-4278332c24fc.svg)](https://wakatime.com/badge/user/173067c8-7ded-4cfb-8605-b3032659c00c/project/2500ba3a-f747-4893-b70e-4278332c24fc)
 
 My personal Linux Fedora Silverblue image with a cloud-native approach. 
 
@@ -20,8 +23,9 @@ once image is done)
   basis.
 * Hosted on ghcr.io
 
-[workspace]: <https://github.com/SimonWoodtli/workspace>
+![Alt](https://repobeats.axiom.co/api/embed/fa9e3f63018894aee1a032e23926a68beb110808.svg "Repobeats analytics image")
 
+[workspace]: <https://github.com/SimonWoodtli/workspace>
 
 Related:
 
