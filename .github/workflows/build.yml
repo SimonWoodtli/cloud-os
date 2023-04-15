@@ -1,3 +1,4 @@
+## TODO add schedule to build image later when project finished mostly done
 name: build-cloud-os
 on:
   push:
@@ -6,11 +7,8 @@ on:
     paths-ignore:
       - '**.md'
       - '**.txt'
-  schedule:
-    - cron: '20 02 * * *'  # 2:20am everyday
 env:
     IMAGE_NAME: ${{ github.event.repository.name }}
-    IMAGE_TAGS: latest ${{ github.sha }}
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
     REGISTRY_USER: ${{ github.actor }}
     REGISTRY_PASSWORD: ${{ github.token }}
@@ -26,11 +24,21 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      # Checkout push-to-registry action github repository
+      ## Checkout push-to-registry action github repository
       - name: Checkout Push to Registry action
         uses: actions/checkout@v2
 
-      # Build image using Buildah action
+      - name: Generate tags
+        id: generate-tags
+        shell: bash
+        run: |
+          TIMESTAMP="$(date +%Y%m%d)"
+          MAJOR_VERSION="37"
+          COMMMIT_SHA="${GITHUB_SHA::7}"
+          IMAGE_TAGS=("latest" "${MAJOR_VERSION}" "${MAJOR_VERSION}-${TIMESTAMP}" "${COMMMIT_SHA}")
+          echo "image_tags=${IMAGE_TAGS[*]}" >> $GITHUB_OUTPUT
+
+      ## Build image using Buildah action
       - name: Build Image
         id: build_image
         uses: redhat-actions/buildah-build@v2
@@ -38,18 +46,18 @@ jobs:
           containerfiles: |
             ./Containerfile
           image: ${{ env.IMAGE_NAME }}
-          tags: ${{ env.IMAGE_TAGS }}
+          tags: ${{ steps.generate-tags.outputs.image_tags }}
           oci: true
 
-      # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
-      # https://github.com/macbre/push-to-ghcr/issues/12                        
+      ## Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
+      ## https://github.com/macbre/push-to-ghcr/issues/12                        
       - name: Lowercase Registry                                                
         id: registry_case                                                       
         uses: ASzc/change-string-case-action@v5                                 
         with:                                                                   
           string: ${{ env.IMAGE_REGISTRY }}
 
-      # Push the image to GHCR (Image Registry)
+      ## Push the image to GHCR (Image Registry)
       - name: Push To GHCR
         uses: redhat-actions/push-to-registry@v2
         id: push
@@ -62,7 +70,7 @@ jobs:
           extra-args: |
             --disable-content-trust
 
-      # To sign image you have to be logged in the registry
+      ## To sign image you have to be logged in the registry
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -70,13 +78,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Sign container
+      ## Sign container
       - uses: sigstore/cosign-installer@v3.0.2
       - name: Sign container image
         run: |
-          echo "${{ env.COSIGN_PRIVATE_KEY }}" > cosign.key
-          wc -c cosign.key
-          cosign sign -y --key cosign.key ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
+          cosign sign -y --key env://${{ env.COSIGN_PRIVATE_KEY }} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
         env:
           TAGS: ${{ steps.push.outputs.digest }}
           COSIGN_EXPERIMENTAL: false
