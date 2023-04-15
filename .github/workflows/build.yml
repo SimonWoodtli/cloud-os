@@ -9,7 +9,7 @@ on:
   schedule:
     - cron: '20 02 * * *'  # 2:20am everyday
 env:
-    IMAGE_NAME: cloud-os
+    IMAGE_NAME: ${{ github.repository }}
     IMAGE_TAGS: latest ${{ github.sha }}
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
     REGISTRY_USER: ${{ github.actor }}
@@ -19,6 +19,10 @@ jobs:
   push-ghcr:
     name: Build and push image
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
     strategy:
       fail-fast: false
     steps:
