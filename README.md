@@ -8,8 +8,7 @@ My personal Linux Fedora Silverblue image with a cloud-native approach.
 ## Installation
 
 After installing Silverblue simply rebase to my up to date custom image.  
-`rpm-ostree rebase fedora:fedora/36/x86_64/silverblue` (need to update this
-once image is done)
+`sudo rpm-ostree rebase --experimental ostree-unverified-registry:ghcr.io/simonwoodtli/cloud-os:latest` 
 
 ## Features
 
