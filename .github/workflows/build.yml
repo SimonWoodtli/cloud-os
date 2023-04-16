@@ -8,6 +8,8 @@ on:
       - '**.md'
       - '**.txt'
 env:
+    IMAGE_FROM: silverblue
+    IMAGE_MAJOR_VERSION: 37
     IMAGE_NAME: ${{ github.event.repository.name }}
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
     REGISTRY_USER: ${{ github.actor }}
@@ -33,10 +35,30 @@ jobs:
         shell: bash
         run: |
           TIMESTAMP="$(date +%Y%m%d)"
-          MAJOR_VERSION="37"
+          MAJOR_VERSION=${{ env.IMAGE_MAJOR_VERSION }}
           COMMMIT_SHA="${GITHUB_SHA::7}"
           IMAGE_TAGS=("latest" "${MAJOR_VERSION}" "${MAJOR_VERSION}-${TIMESTAMP}" "${COMMMIT_SHA}")
           echo "image_tags=${IMAGE_TAGS[*]}" >> $GITHUB_OUTPUT
+
+      ## Gather metadata
+      - name: Get current version
+        id: labels
+        run: |
+          ver=$(skopeo inspect docker://quay.io/fedora-ostree-desktops/${{ env.IMAGE_FROM }}:${{ env.IMAGE_MAJOR_VERSION }} | jq -r '.Labels["org.opencontainers.image.version"]')
+          echo "VERSION=$ver" >> $GITHUB_OUTPUT
+
+      # Build metadata
+      - name: Image Metadata
+        uses: docker/metadata-action@v4
+        id: meta
+        with:
+          images: |
+            ${{ env.IMAGE_NAME }}
+          labels: |
+            org.opencontainers.image.title=${{ env.IMAGE_NAME }}
+            org.opencontainers.image.version=${{ steps.labels.outputs.VERSION }}
+            org.opencontainers.image.description=A base ${{ env.IMAGE_NAME }} image
+            io.artifacthub.package.readme-url=https://raw.githubusercontent.com/SimonWoodtli/cloud-os/main/README.md
 
       ## Build image using Buildah action
       - name: Build Image
@@ -47,6 +69,7 @@ jobs:
             ./Containerfile
           image: ${{ env.IMAGE_NAME }}
           tags: ${{ steps.generate-tags.outputs.image_tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           oci: true
 
       ## Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
