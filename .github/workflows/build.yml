@@ -8,7 +8,7 @@ on:
       - '**.md'
       - '**.txt'
 env:
-    IMAGE_FROM: silverblue
+    SOURCE_IMAGE: silverblue
     IMAGE_MAJOR_VERSION: 37
     IMAGE_NAME: ${{ github.event.repository.name }}
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
@@ -44,7 +44,7 @@ jobs:
       - name: Get current version
         id: labels
         run: |
-          ver=$(skopeo inspect docker://quay.io/fedora-ostree-desktops/${{ env.IMAGE_FROM }}:${{ env.IMAGE_MAJOR_VERSION }} | jq -r '.Labels["org.opencontainers.image.version"]')
+          ver=$(skopeo inspect docker://quay.io/fedora-ostree-desktops/${{ env.SOURCE_IMAGE }}:${{ env.IMAGE_MAJOR_VERSION }} | jq -r '.Labels["org.opencontainers.image.version"]')
           echo "VERSION=$ver" >> $GITHUB_OUTPUT
 
       # Build metadata
@@ -57,7 +57,7 @@ jobs:
           labels: |
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
             org.opencontainers.image.version=${{ steps.labels.outputs.VERSION }}
-            org.opencontainers.image.description=A base ${{ env.IMAGE_NAME }} image
+            org.opencontainers.image.description=My personal ${{ env.IMAGE_NAME }} image
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/SimonWoodtli/cloud-os/main/README.md
 
       ## Build image using Buildah action
@@ -69,8 +69,12 @@ jobs:
             ./Containerfile
           image: ${{ env.IMAGE_NAME }}
           tags: ${{ steps.generate-tags.outputs.image_tags }}
+          build-args: |
+            IMAGE_NAME=${{ env.IMAGE_NAME }}
+            SOURCE_IMAGE=${{ env.SOURCE_IMAGE }}
+            FEDORA_MAJOR_VERSION=${{ env.IMAGE_MAJOR_VERSION }}
           labels: ${{ steps.meta.outputs.labels }}
-          oci: true
+          oci: false 
 
       ## Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       ## https://github.com/macbre/push-to-ghcr/issues/12                        
