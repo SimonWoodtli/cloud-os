@@ -5,10 +5,17 @@
 
 My personal Linux Fedora Silverblue image with a cloud-native approach. 
 
+This project is possible thanks to the amazing work from [uBlue] 🙏  
+I learned a lot from their codebase and used that knowledge to develop my own
+offshoot of it.
+
 ## Installation
+
+1. verify image: `cosign verify --key cosign.pub ghcr.io/simonwoodtli/cloud-os:latest` (NEED TO figure out if URL can be used for cosign.pub instead of locally safing it)
 
 After installing Silverblue simply rebase to my up to date custom image.  
 `sudo rpm-ostree rebase --experimental ostree-unverified-registry:ghcr.io/simonwoodtli/cloud-os:latest` 
+
 
 ## Features
 
@@ -24,6 +31,7 @@ After installing Silverblue simply rebase to my up to date custom image.
 
 ![Alt](https://repobeats.axiom.co/api/embed/fa9e3f63018894aee1a032e23926a68beb110808.svg "Repobeats analytics image")
 
+[uBlue]: <https://github.com/ublue-os>
 [workspace]: <https://github.com/SimonWoodtli/workspace>
 
 Related:

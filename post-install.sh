@@ -7,5 +7,5 @@ systemctl enable flatpak-system-update.timer
 
 systemctl --global enable flatpak-user-update.timer
 
-cp /usr/share/ublue-os/ublue-os-update-services/etc/rpm-ostreed.conf /etc/rpm-ostreed.conf
+#cp /usr/share/ublue-os/ublue-os-update-services/etc/rpm-ostreed.conf /etc/rpm-ostreed.conf
 ## TODO add furter config stuff here, dconf and all that jazz
