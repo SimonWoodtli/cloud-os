@@ -13,7 +13,7 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
 fi
 
 # Removing Filtered Flathub Repository
-/usr/bin/flatpak remote-delete flathub --force || exit 1
+#/usr/bin/flatpak remote-delete flathub --force || exit 1
 # Enabling Flathub Repository
 /usr/bin/flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || exit 1
 # Replacing Fedora Flatpaks with Flathub Ones (this may take a while)"
