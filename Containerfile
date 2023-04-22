@@ -14,7 +14,13 @@ ADD build.sh /tmp/build.sh
 ADD post-install.sh /tmp/post-install.sh
 ADD packages.json /tmp/packages.json
 
+## install pkgs from containers if needed on host and: (downside none upgradeable via rpm-ostree)
+## 1. not yet in Fedora repo
+## 2. you need bleeding edge version
+## 3. modified binaries/none default compiled binaries
 COPY --from=docker.io/mikefarah/yq /usr/bin/yq /usr/bin/yq
+COPY --from=cgr.dev/chainguard/cosign:latest /usr/bin/cosign /usr/bin/cosign
+##TODO add borderless tmux here
 
 ## Already in config/rpms/
 #COPY --from=ghcr.io/ublue-os/config:latest /rpms /tmp/rpms
