@@ -2,7 +2,7 @@ default:
     @just --list
     
 firstboot:
-  sudo /usr/bin/firstboot
+  firstboot
 
 bios:
   systemctl reboot --firmware-setup
