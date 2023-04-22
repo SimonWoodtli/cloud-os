@@ -1,0 +1,6 @@
+flatpaks:
+  - org.mozilla.firefox
+  - com.mattjakeman.ExtensionManager
+  - org.libreoffice.LibreOffice
+  - org.gustavoperedo.FontDownloader
+  - com.github.tchx84.Flatseal
