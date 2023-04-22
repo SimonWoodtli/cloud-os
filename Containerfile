@@ -14,6 +14,8 @@ ADD build.sh /tmp/build.sh
 ADD post-install.sh /tmp/post-install.sh
 ADD packages.json /tmp/packages.json
 
+COPY --from=docker.io/mikefarah/yq /usr/bin/yq /usr/bin/yq
+
 ## Already in config/rpms/
 #COPY --from=ghcr.io/ublue-os/config:latest /rpms /tmp/rpms
 
