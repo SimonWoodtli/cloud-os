@@ -1,5 +1,7 @@
 #!/bin/sh
 [ "$(flatpak remotes | grep -q fedora; echo $?)" -eq 0 ] || { echo "Firstboot already ran"; exit 0; }
+read -s -p "[sudo] password for $(whoami): " password
+
 
 (
 echo "# Waiting for Internet connection"
@@ -7,7 +9,7 @@ until /usr/bin/ping -q -c 1 flathub.org; do sleep 1; done
 echo "00"
 
 echo "# Removing Filtered Flathub Repository"
-/usr/bin/flatpak remote-delete flathub --force ||:
+sudo -S /usr/bin/flatpak remote-delete flathub --force <<< "$password" ||:
 if [ "$?" != 0 ] ; then
         zenity --error \
           --text="Removing Filtered Flathub Repo Failed"
@@ -43,7 +45,7 @@ if [ "$?" != 0 ] ; then
 fi
 
 echo "# Removing Fedora Flatpak Repository"
-/usr/bin/flatpak remote-delete fedora --force ||:
+sudo -S /usr/bin/flatpak remote-delete fedora --force <<< "$password" ||:
 if [ "$?" != 0 ] ; then
         zenity --error \
           --text="Removing Fedora Flatpak Repo Failed"
