@@ -19,6 +19,11 @@ wget -P /tmp/rpms \
     https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-${RELEASE}.noarch.rpm \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${RELEASE}.noarch.rpm
 
+## fix rpm install cannot overwrite existing files (can't force update it)
+## either this or rmv profile/user from rpm package and just filter
+## strings with sed here
+rm /etc/dconf/profile/user
+
 rpm-ostree install \
     /tmp/rpms/*.rpm \
     fedora-repos-archive
