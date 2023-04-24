@@ -1,6 +1,7 @@
 # Cloud-OS
 
 [![License](https://img.shields.io/badge/license-Apache2-brightgreen.svg)](LICENSE)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/cloud-os)](https://artifacthub.io/packages/search?repo=cloud-os)
 [![wakatime](https://wakatime.com/badge/user/173067c8-7ded-4cfb-8605-b3032659c00c/project/2500ba3a-f747-4893-b70e-4278332c24fc.svg)](https://wakatime.com/badge/user/173067c8-7ded-4cfb-8605-b3032659c00c/project/2500ba3a-f747-4893-b70e-4278332c24fc)
 
 My personal Linux Fedora Silverblue image with a cloud-native approach. 
