@@ -22,7 +22,8 @@ wget -P /tmp/rpms \
 ## fix rpm install cannot overwrite existing files (can't force update it)
 ## either this or rmv profile/user from rpm package and just filter
 ## strings with sed here
-rm /etc/dconf/profile/user
+#rm /etc/dconf/profile/user
+sed -i '/system-db:site/d;/system-db:distro/d' /etc/dconf/profile/user
 
 rpm-ostree install \
     /tmp/rpms/*.rpm \
