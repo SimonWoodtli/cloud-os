@@ -22,7 +22,11 @@
         "vim",
         "zstd",
         "ffmpegthumbnailer",
-        "gnome-tweaks"
+        "gnome-tweaks",
+        "gnome-shell-extension-blur-my-shell",
+        "gnome-shell-extension-user-theme",
+        "gnome-shell-extension-just-perfection",
+        "gnome-shell-extension-auto-move-windows"
         ],
      "exclude": [
         "libavcodec-free",
