@@ -6,7 +6,7 @@ declare SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null &
 
 mkdir -p /tmp/cloud-os/rpmbuild/SOURCES
 
-cp ${SCRIPT_DIR}/{01-cloud-os,user,dconf-update.service} /tmp/cloud-os/rpmbuild/SOURCES
+cp ${SCRIPT_DIR}/{01-cloud-os,dconf-update.service} /tmp/cloud-os/rpmbuild/SOURCES
 
 rpmbuild -ba \
     --define '_topdir /tmp/cloud-os/rpmbuild' \
