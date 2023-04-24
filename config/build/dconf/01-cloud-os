@@ -1,0 +1,50 @@
+[org/gnome/shell] 
+favorite-apps = ['org.mozilla.firefox.desktop', 'org.mozilla.Thunderbird.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Rhythmbox3.desktop', 'org.libreoffice.LibreOffice.writer.desktop', 'org.gnome.Software.desktop', 'yelp.desktop']
+enabled-extensions = ['blur-my-shell@aunetx', 'jik@kamens.us']
+
+[org/gnome/desktop/background]
+picture-uri='file:///usr/share/backgrounds/blackboard.jpg'
+picture-uri-dark='file:///usr/share/backgrounds/blackboard.jpg'
+picture-options='stretched'
+primary-color='000000'
+secondary-color='FFFFFF'
+
+[org/gnome/desktop/interface]
+enable-hot-corners=false
+clock-show-weekday=true
+cursor-theme="Yaru"
+icon-theme="Yaru"
+gtk-theme="Yaru"
+font-antialiasing="rgba"
+font-name="Ubuntu Medium Nerd Font 12"
+document-font-name="Ubuntu Medium Nerd Font 12"
+monospace-font-name="UbuntuMono Nerd Font Mono 16"
+
+[org/gnome/desktop/sound]
+allow-volume-above-100-percent=true
+
+[org/gnome/desktop/wm/preferences]
+num-workspaces='4'
+
+[org/gnome/desktop/peripherals/touchpad]
+tap-to-click=true
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Super>t'
+command='gnome-terminal'
+name='gnome-terminal'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
+binding='<Super>v'
+command='flatpak run io.gitlab.librewolf-community'
+name='librewolf'
+
+[org/gnome/software]
+allow-updates=false
+download-updates=false
+download-updates-notify=false
+first-run=false
+
+[org/gnome/settings-daemon/plugins/media-keys]
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
+home=['<Super>e']
