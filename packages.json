@@ -1,32 +1,30 @@
 {
     "include": [
-        "apr",
-        "apr-util",
-        "distrobox",
         "ffmpeg",
         "ffmpeg-libs",
-        "fzf",
-        "htop",
         "intel-media-driver",
-        "just",
+        "mesa-va-drivers-freeworld",
         "kernel-devel-matched",
         "libratbag-ratbagd",
         "libva-intel-driver",
         "libva-utils",
-        "mesa-va-drivers-freeworld",
-        "nvme-cli",
-        "nvtop",
-        "openssl",
         "pipewire-codec-aptx",
-        "smartmontools",
-        "vim",
-        "zstd",
-        "ffmpegthumbnailer",
         "gnome-tweaks",
-        "gnome-shell-extension-blur-my-shell",
-        "gnome-shell-extension-user-theme",
-        "gnome-shell-extension-just-perfection",
-        "gnome-shell-extension-auto-move-windows"
+        "zstd",
+        "openssl",
+        "distrobox",
+        "just",
+        "fzf",
+        "vim",
+        "tmux",
+        "apr",
+        "apr-util",
+        "nvme-cli",
+        "smartmontools",
+        "btop",
+        "nvtop",
+        "python3-pip",
+        "ffmpegthumbnailer"
         ],
      "exclude": [
         "libavcodec-free",
@@ -39,6 +37,7 @@
         "libswscale-free",
         "mesa-va-drivers",
         "firefox",
-        "firefox-langpacks"
+        "firefox-langpacks",
+        "gnome-software-rpm-ostree"
      ]
 }
