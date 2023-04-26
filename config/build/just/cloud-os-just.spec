@@ -1,22 +1,22 @@
-Name:           ublue-os-just
-Packager:       ublue-os
-Vendor:         ublue-os
+Name:           cloud-os-just
+Packager:       cloud-os
+Vendor:         cloud-os
 Version:        0.1.1
 Release:        1%{?dist}
-Summary:        ublue-os just integration
-License:        MIT
-URL:            https://github.com/ublue-os/config
+Summary:        cloud-os just integration
+License:        Apache-2.0
+URL:            https://github.com/SimonWoodtli/cloud-os
 
 BuildArch:      noarch
 Supplements:    just
 
 Source0:        justfile
-Source1:        ublue-os-just.sh
+Source1:        cloud-os-just.sh
 Source2:        firstboot
 Source3:        recipe.yml
 
 %description
-Adds ublue-os just integration for easier setup
+Adds cloud-os just integration for easier setup
 
 %prep
 %setup -q -c -T
@@ -26,16 +26,16 @@ Adds ublue-os just integration for easier setup
 mkdir -p -m0755  %{buildroot}%{_datadir}/%{VENDOR}/%{NAME}
 install -Dm755 %{SOURCE1} %{SOURCE2} %{buildroot}%{_datadir}/%{VENDOR}/%{NAME}
 install -Dm644 %{SOURCE0} %{SOURCE3} %{buildroot}%{_datadir}/%{VENDOR}/%{NAME}
-install -Dm755 %{SOURCE1} %{buildroot}%{_sysconfdir}/profile.d/ublue-os-just.sh
+install -Dm755 %{SOURCE1} %{buildroot}%{_sysconfdir}/profile.d/cloud-os-just.sh
 install -Dm755 %{SOURCE2} %{buildroot}%{_bindir}/firstboot
 
 %files
 %dir %attr(0755,root,root) %{_datadir}/%{VENDOR}/%{NAME}
 %attr(0644,root,root) %{_datadir}/%{VENDOR}/%{NAME}/justfile
 %attr(0644,root,root) %{_datadir}/%{VENDOR}/%{NAME}/recipe.yml
-%attr(0755,root,root) %{_datadir}/%{VENDOR}/%{NAME}/ublue-os-just.sh
+%attr(0755,root,root) %{_datadir}/%{VENDOR}/%{NAME}/cloud-os-just.sh
 %attr(0755,root,root) %{_datadir}/%{VENDOR}/%{NAME}/firstboot
-%attr(0755,root,root) %{_sysconfdir}/profile.d/ublue-os-just.sh
+%attr(0755,root,root) %{_sysconfdir}/profile.d/cloud-os-just.sh
 %attr(0755,root,root) %{_bindir}/firstboot
 
 %changelog

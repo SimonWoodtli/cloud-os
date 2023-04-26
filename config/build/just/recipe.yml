@@ -1,6 +1,38 @@
 flatpaks:
-  - org.mozilla.firefox
-  - com.mattjakeman.ExtensionManager
-  - org.libreoffice.LibreOffice
-  - org.gustavoperedo.FontDownloader
   - com.github.tchx84.Flatseal
+  - com.mattjakeman.ExtensionManager
+  - org.gustavoperedo.FontDownloader
+  - org.ferdium.Ferdium
+  - org.mozilla.firefox
+  - com.brave.Browser
+  - net.mullvad.MullvadBrowser
+  - io.gitlab.librewolf-community
+  - org.gimp.GIMP
+  - com.jgraph.drawio.desktop
+  - net.ankiweb.Anki
+  - com.calibre_ebook.calibre
+  - com.gitlab.tipp10.tipp10
+  - com.uploadedlobster.peek
+  - com.github.xournalpp.xournalpp
+  - no.mifi.losslesscut
+  - fr.romainvigier.MetadataCleaner
+  - re.sonny.Workbench
+  - in.srev.guiscrcpy
+  - fr.handbrake.ghb
+  - org.qbittorrent.qBittorrent
+  - io.mpv.Mpv
+  - com.github.muriloventuroso.pdftricks
+  - org.libreoffice.LibreOffice
+  - org.gnome.Geary
+extensions:
+  - blur-my-shell@aunetx
+  - user-theme@gnome-shell-extensions.gcampax.github.com
+  - just-perfection-desktop@just-perfection
+  - auto-move-windows@gnome-shell-extensions.gcampax.github.com
+  - hide-panel-lite@fthx
+  - trayIconsReloaded@selfmade.pl
+  - allowlockedremotedesktop@kamens.us
+  - rounded-window-corners@yilozt
+  - sound-output-device-chooser@kgshank.net
+  - Vitals@CoreCoding.com
+  - PrivacyMenu@stuarthayhurst

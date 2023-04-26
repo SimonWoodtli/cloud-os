@@ -4,11 +4,11 @@ set -ouex pipefail
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-mkdir -p /tmp/ublue-os/rpmbuild/SOURCES
+mkdir -p /tmp/cloud-os/rpmbuild/SOURCES
 
-cp ${SCRIPT_DIR}/{justfile,ublue-os-just.sh,firstboot,recipe.yml} /tmp/ublue-os/rpmbuild/SOURCES
+cp ${SCRIPT_DIR}/{justfile,cloud-os-just.sh,firstboot,recipe.yml} /tmp/cloud-os/rpmbuild/SOURCES
 
 rpmbuild -ba \
-    --define '_topdir /tmp/ublue-os/rpmbuild' \
+    --define '_topdir /tmp/cloud-os/rpmbuild' \
     --define '%_tmppath %{_topdir}/tmp' \
-    ${SCRIPT_DIR}/ublue-os-just.spec
+    ${SCRIPT_DIR}/cloud-os-just.spec
