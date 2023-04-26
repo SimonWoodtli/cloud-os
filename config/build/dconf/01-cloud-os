@@ -1,6 +1,6 @@
-[org/gnome/shell] 
+[org/gnome/shell]
 favorite-apps = ['org.mozilla.firefox.desktop', 'org.mozilla.Thunderbird.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Rhythmbox3.desktop', 'org.libreoffice.LibreOffice.writer.desktop', 'org.gnome.Software.desktop', 'yelp.desktop']
-enabled-extensions = ['blur-my-shell@aunetx', 'jik@kamens.us']
+enabled-extensions = [ 'blur-my-shell@aunetx', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'just-perfection-desktop@just-perfection', 'auto-move-windows@gnome-shell-extensions.gcampax.github.com', 'hide-panel-lite@fthx', 'trayIconsReloaded@selfmade.pl', 'allowlockedremotedesktop@kamens.us', 'rounded-window-corners@yilozt', 'sound-output-device-chooser@kgshank.net', 'Vitals@CoreCoding.com', 'PrivacyMenu@stuarthayhurst' ]
 
 [org/gnome/desktop/background]
 picture-uri='file:///usr/share/backgrounds/blackboard.jpg'
@@ -12,9 +12,6 @@ secondary-color='FFFFFF'
 [org/gnome/desktop/interface]
 enable-hot-corners=false
 clock-show-weekday=true
-cursor-theme="Yaru"
-icon-theme="Yaru"
-gtk-theme="Yaru"
 font-antialiasing="rgba"
 font-name="Ubuntu Medium Nerd Font 12"
 document-font-name="Ubuntu Medium Nerd Font 12"
@@ -23,21 +20,77 @@ monospace-font-name="UbuntuMono Nerd Font Mono 16"
 [org/gnome/desktop/sound]
 allow-volume-above-100-percent=true
 
+[org/gnome/desktop/wm/keybindings]
+close=['<Super>q']
+maximize=['<Super>k']
+minimize=@as []
+move-to-monitor-down=['<Shift><Super>j']
+move-to-monitor-left=['<Shift><Super>h']
+move-to-monitor-right=['<Shift><Super>l']
+move-to-monitor-up=['<Shift><Super>k']
+toggle-fullscreen=['F11']
+unmaximize=['<Super>j']
+
 [org/gnome/desktop/wm/preferences]
 num-workspaces='4'
+button-layout='appmenu:minimize,maximize,close'
+
+[org/gnome/mutter/keybindings]
+toggle-tiled-left=['<Super>h']
+toggle-tiled-right=['<Super>l']
 
 [org/gnome/desktop/peripherals/touchpad]
 tap-to-click=true
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
-binding='<Super>t'
-command='gnome-terminal'
-name='gnome-terminal'
-
-[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
 binding='<Super>v'
 command='flatpak run io.gitlab.librewolf-community'
 name='librewolf'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
+binding='<Super>b'
+command='flatpak run com.brave.Browser'
+name='brave'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
+binding='<Super>c'
+command='flatpak run net.mullvad.MullvadBrowser'
+name='mullvad-browser'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3]
+binding='<Super>d'
+command='flatpak run org.zealdocs.Zeal'
+name='zeal'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4]
+binding='<Super>a'
+command='flatpak run net.ankiweb.Anki'
+name='anki'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5]
+binding='<Super>f'
+command='flatpak run org.ferdium.Ferdium'
+name='ferdium'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6]
+binding='<Control><Alt>w'
+command='__bmw-gui'
+name='bookmark-linkhandler-w'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7]
+binding='<Control><Alt>p'
+command='__bmw-gui'
+name='bookmark-linkhandler-p'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8]
+binding='<Control><Alt>c'
+command='__bmw-gui'
+name='bookmark-linkhandler-c'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9]
+binding='<Super>t'
+command='gnome-terminal --full-screen'
+name='gnome-terminal'
 
 [org/gnome/software]
 allow-updates=false
@@ -46,5 +99,32 @@ download-updates-notify=false
 first-run=false
 
 [org/gnome/settings-daemon/plugins/media-keys]
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
-home=['<Super>e']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/']
+email=['<Super>e']
+home=@as []
+screensaver=@as []
+
+[org/gnome/shell/keybindings]
+screenshot=['Launch5']
+show-screenshot-ui=['Launch6']
+toggle-application-view=@as []
+toggle-message-tray=@as []
+
+[org/gnome/terminal/legacy/profiles:/:2ea51c17-a89c-4151-af02-925016c2a29a]
+audible-bell=false
+background-color='rgb(40,40,40)'
+background-transparency-percent=3
+bold-color-same-as-fg=true
+cursor-blink-mode='on'
+cursor-shape='block'
+font='UbuntuMono Nerd Font Mono 16'
+foreground-color='rgb(235,219,178)'
+palette=['rgb(40,40,40)', 'rgb(204,36,29)', 'rgb(152,151,26)', 'rgb(215,153,33)', 'rgb(69,133,136)', 'rgb(177,98,134)', 'rgb(104,157,106)', 'rgb(168,153,132)', 'rgb(146,131, 116)', 'rgb(251,73,52)', 'rgb(184,187,38)', 'rgb(250,189,47)', 'rgb(131,165,152)', 'rgb(211,134,155)', 'rgb(174,192,124)', 'rgb(235,219,178)']
+scroll-on-output=false
+scrollbar-policy='never'
+text-blink-mode='always'
+use-custom-command=false
+use-system-font=false
+use-theme-colors=false
+use-transparent-background=true
+visible-name='gruvbox-theme-profile'
