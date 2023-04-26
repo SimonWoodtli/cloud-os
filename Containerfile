@@ -20,9 +20,8 @@ ADD packages.json /tmp/packages.json
 ## 3. modified binaries/none default compiled binaries
 COPY --from=docker.io/mikefarah/yq /usr/bin/yq /usr/bin/yq
 COPY --from=cgr.dev/chainguard/cosign:latest /usr/bin/cosign /usr/bin/cosign
-COPY --from=ghcr.io/simonwoodtli/fonts:latest /fonts /usr/share/fonts
-COPY --from=ghcr.io/simonwoodtli/wallpapers:latest /backgrounds /usr/share/backgrounds
-##TODO add borderless tmux here
+COPY --from=ghcr.io/simonwoodtli/fonts:latest /fonts/* /usr/share/fonts/cloud-os
+COPY --from=ghcr.io/simonwoodtli/wallpapers:latest /backgrounds/* /usr/share/backgrounds
 
 ## Already in config/rpms/
 #COPY --from=ghcr.io/ublue-os/config:latest /rpms /tmp/rpms
