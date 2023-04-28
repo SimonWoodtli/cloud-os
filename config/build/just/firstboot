@@ -1,8 +1,24 @@
 #!/bin/sh
+#FIXME in F38 flathub ships with it, so this test would fail need to check for options instead of name
 [ "$(flatpak remotes | grep -q fedora; echo $?)" -eq 0 ] || { echo "Firstboot already ran"; exit 0; }
+############################### utilities ##############################
+createNewProfile() {
+    local dir=/org/gnome/terminal/legacy/profiles:
+    local profileIds=(\
+      $(dconf list $dir/ | grep ^: | sed 's/\///g' | sed 's/://g'))
+    local profileName="$1"
+    local profileIdsOld="$(dconf read "$dir"/list | tr -d "]")"
+    local profileId="$2"
+
+    [ -z "$profileIdsOld" ] && local profileIdsOld="["  # if there's no `list` key
+    [ ${#profileIds[@]} -gt 0 ] && local delimiter=,  # if the list is empty
+
+    dconf write $dir/list \
+        "${profileIdsOld}${delimiter} '$profileId']"
+    dconf write "$dir/:$profileId"/visible-name "'$profileName'"
+}
+################################# main #################################
 read -s -p "[sudo] password for $(whoami): " password
-
-
 (
 echo "# Waiting for Internet connection"
 until /usr/bin/ping -q -c 1 flathub.org; do sleep 1; done
@@ -92,6 +108,11 @@ for pkg in $extensions; do
   # Automatically calculates evenly spaced progess using bc, cuts everything after decimal point.
   echo "${i}/${flatpaks_count} * (95-30) + 30" | bc -l | cut -d "." -f1 
 done
+
+echo "Create gnome-terminal profiles"
+createNewProfile gruvbox-host eaa70d0f-2bff-4c94-8714-5c8815cf8b0f
+createNewProfile gruvbox-workspace 2ea51c17-a89c-4151-af02-925016c2a29a
+createNewProfile gruvbox-alpine 4c3035f9-08ef-4956-8cf2-c11fe365d146
 
 echo "Enabling Flatpak auto update"
 /usr/bin/systemctl --user enable --now flatpak-user-update.timer
