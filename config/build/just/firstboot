@@ -70,6 +70,9 @@ for pkg in $flatpaks; do
   echo "${i}/${flatpaks_count} * (95-30) + 30" | bc -l | cut -d "." -f1 
 done
 
+echo "# Installing pipx"
+python3 -m pip install --user pipx
+
 echo "# Installing gnome-extensions-cli"
 pipx install gnome-extensions-cli --system-site-packages
 

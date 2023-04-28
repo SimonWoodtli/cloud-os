@@ -10,9 +10,13 @@ bios:
 changelogs:
   rpm-ostree db diff --changelogs
 
-distrobox-boxkit:
-  echo 'Creating Boxkit distrobox ...'
-  distrobox create --image ghcr.io/ublue-os/boxkit -n boxkit -Y
+distrobox-workspace:
+  echo 'Creating Workspace distrobox ...'
+  distrobox create --image ghcr.io/simonwoodtli/workspace -n workspace -Y
+
+distrobox-alpine:
+  echo 'Creating Alpine distrobox ...'
+  distrobox create --image quay.io/toolbx-images/alpine-toolbox:edge -n alpine -Y
 
 distrobox-debian:
   echo 'Creating Debian distrobox ...'
