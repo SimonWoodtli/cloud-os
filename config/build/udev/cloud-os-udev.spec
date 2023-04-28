@@ -1,11 +1,11 @@
-Name:           ublue-os-udev-rules
-Packager:       ublue-os
-Vendor:         ublue-os
+Name:           cloud-os-udev-rules
+Packager:       cloud-os
+Vendor:         cloud-os
 Version:        0.1
 Release:        1%{?dist}
-Summary:        ublue-os udev rules
-License:        MIT
-URL:            https://github.com/ublue-os/config
+Summary:        cloud-os udev rules
+License:        Apache-2.0
+URL:            https://github.com/SimonWoodtli/cloud-os/tree/main/config
 
 BuildArch:      noarch
 Supplements:    udev-rules
@@ -38,7 +38,7 @@ Source23:       70-u2f.rules
 Source24:       80-wooting.rules
 
 %description
-Adds ublue-os udev-rules integration for easier setup
+Adds cloud-os udev-rules integration for easier setup
 
 %prep
 %setup -q -c -T
