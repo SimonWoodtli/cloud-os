@@ -23,7 +23,10 @@ flatpaks:
   - io.mpv.Mpv
   - com.github.muriloventuroso.pdftricks
   - org.libreoffice.LibreOffice
+  - org.zealdocs.Zeal
   - org.gnome.Geary
+  - org.gtk.Gtk3theme.adw-gtk3
+  - org.gtk.Gtk3theme.adw-gtk3-dark
 extensions:
   - blur-my-shell@aunetx
   - user-theme@gnome-shell-extensions.gcampax.github.com
