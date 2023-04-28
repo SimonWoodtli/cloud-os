@@ -1,11 +1,11 @@
-Name:           ublue-os-update-services
-Packager:       ublue-os
-Vendor:         ublue-os
+Name:           cloud-os-update-services
+Packager:       cloud-os
+Vendor:         cloud-os
 Version:        0.1
 Release:        1%{?dist}
-Summary:        ublue-os auto-update services
-License:        MIT
-URL:            https://github.com/ublue-os/config
+Summary:        cloud-os auto-update services
+License:        Apache-2.0
+URL:            https://github.com/cloud-os/config
 
 BuildArch:      noarch
 Supplements:    update-services
@@ -19,7 +19,7 @@ Source5:        10-flatpak-system-update.preset
 Source6:        rpm-ostreed.conf
 
 %description
-Adds ublue-os auto-uppdate services integration for easier setup
+Adds cloud-os auto-uppdate services integration for easier setup
 
 %prep
 %setup -q -c -T
@@ -31,7 +31,6 @@ install -Dm644 %{SOURCE0} %{SOURCE1} %{buildroot}%{_userunitdir}
 install -Dm644 %{SOURCE2} %{buildroot}%{_userpresetdir}
 install -Dm644 %{SOURCE3} %{SOURCE4} %{buildroot}%{_unitdir}
 install -Dm644 %{SOURCE5} %{buildroot}%{_presetdir}
-#install -Dm644 %{SOURCE6} %{buildroot}%{_sysconfdir}
 
 %files
 %dir %attr(0755,root,root) %{_datadir}/%{VENDOR}/%{NAME}
@@ -48,7 +47,6 @@ install -Dm644 %{SOURCE5} %{buildroot}%{_presetdir}
 %attr(0644,root,root) %{_unitdir}/flatpak-system-update.timer
 %attr(0644,root,root) %{_unitdir}/flatpak-system-update.service
 %attr(0644,root,root) %{_presetdir}/10-flatpak-system-update.preset
-#%attr(0644,root,root) %{_sysconfdir}/rpm-ostreed.conf
 
 %changelog
 * Mon Apr 17 2023 Simon D. Woodtli <xnasero@posteo.net> - 0.1

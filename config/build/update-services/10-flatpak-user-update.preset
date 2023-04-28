@@ -1,1 +1,1 @@
-enable flatpak-user-update.service
+enable --user flatpak-user-update.service
