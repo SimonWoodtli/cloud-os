@@ -24,9 +24,6 @@ show-weekdate=true
 [org/gnome/desktop/sound]
 allow-volume-above-100-percent=true
 
-[org/gnome/terminal/legacy/profiles/org/gnome/desktop/remote-desktop/rdp]
-enable=true
-
 [org/gnome/desktop/input-sources]
 current=uint32 0
 mru-sources=[('xkb', 'us'), ('ibus', 'uniemoji')]
@@ -59,10 +56,10 @@ move-to-monitor-right=['<Shift><Super>l']
 move-to-monitor-up=['<Shift><Super>k']
 switch-input-source=['<Super>space']
 switch-input-source-backward=['<Shift><Super>space']
-switch-to-workspace-1=['<Super>1']
-switch-to-workspace-2=['<Super>2']
-switch-to-workspace-3=['<Super>3']
-switch-to-workspace-4=['<Super>4']
+move-to-workspace-1=['<Super>1']
+move-to-workspace-2=['<Super>2']
+move-to-workspace-3=['<Super>4']
+move-to-workspace-4=['<Super>4']
 toggle-fullscreen=['F11']
 unmaximize=['<Super>j']
 
@@ -147,6 +144,10 @@ screensaver=@as []
 screenshot=['Launch5']
 show-screenshot-ui=['Launch6']
 toggle-application-view=@as []
+switch-to-application-1=@as []
+switch-to-application-2=@as []
+switch-to-application-3=@as []
+switch-to-application-4=@as []
 toggle-message-tray=@as []
 
 [org/gnome/terminal/legacy/profiles:/:eaa70d0f-2bff-4c94-8714-5c8815cf8b0f]
