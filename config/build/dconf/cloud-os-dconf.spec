@@ -5,7 +5,7 @@ Version:        0.1
 Release:        1%{?dist}
 Summary:        cloud-os dconf settings to customize desktop
 License:        Apache-2.0
-URL:            https://github.com/SimonWoodtli/cloud-os
+URL:            https://github.com/SimonWoodtli/cloud-os/tree/main/config/build/dconf
 
 BuildArch:      noarch
 Supplements:    dconf

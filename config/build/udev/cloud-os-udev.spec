@@ -5,7 +5,7 @@ Version:        0.1
 Release:        1%{?dist}
 Summary:        cloud-os udev rules
 License:        Apache-2.0
-URL:            https://github.com/SimonWoodtli/cloud-os/tree/main/config
+URL:            https://github.com/SimonWoodtli/cloud-os/tree/main/config/build/udev
 
 BuildArch:      noarch
 Supplements:    udev-rules

@@ -1,133 +1,115 @@
-#!/bin/sh
-#FIXME in F38 flathub ships with it, so this test would fail need to check for options instead of name
+#!/bin/bash
+declare red=$'\033[31m'
+declare reset=$'\033[0m'
+declare -i major=${BASH_VERSION:0:1}
+declare input="0"
+declare -i i=0
+##FIXME in F38 flathub ships with it, so this test would fail need to check for options instead of name
+##FIXME I need a firstboot-done file to check if the whole script ran on
+##a system and only allow it to run if it did not yet run
+############################# runtime-tests ############################
 [ "$(flatpak remotes | grep -q fedora; echo $?)" -eq 0 ] || { echo "Firstboot already ran"; exit 0; }
-############################### utilities ##############################
-createNewProfile() {
-    local dir=/org/gnome/terminal/legacy/profiles:
-    local profileIds=(\
-      $(dconf list $dir/ | grep ^: | sed 's/\///g' | sed 's/://g'))
-    local profileName="$1"
-    local profileIdsOld="$(dconf read "$dir"/list | tr -d "]")"
-    local profileId="$2"
-
-    [ -z "$profileIdsOld" ] && local profileIdsOld="["  # if there's no `list` key
-    [ ${#profileIds[@]} -gt 0 ] && local delimiter=,  # if the list is empty
-
-    dconf write $dir/list \
-        "${profileIdsOld}${delimiter} '$profileId']"
-    dconf write "$dir/:$profileId"/visible-name "'$profileName'"
-}
+if [[ ! ($major == 4 || $major == 5) ]]; then
+  echo "${red}Error:$reset Sorry, requires Bash 4+. Install and try again."
+  exit 1
+fi
+[[ -f /tmp/firstboot-done ]] && input="$(cat /tmp/firstboot-done)"
+echo "Info: Waiting for Internet connection"
+until /usr/bin/ping -q -c 1 flathub.org; do sleep 1; done
 ################################# main #################################
 read -s -p "[sudo] password for $(whoami): " password
-(
-echo "# Waiting for Internet connection"
-until /usr/bin/ping -q -c 1 flathub.org; do sleep 1; done
-echo "00"
 
-echo "# Removing Filtered Flathub Repository"
-sudo -S /usr/bin/flatpak remote-delete flathub --force <<< "$password" ||:
-if [ "$?" != 0 ] ; then
-        zenity --error \
-          --text="Removing Filtered Flathub Repo Failed"
-        exit 1
-fi
-echo "3"
-
-echo "# Enabling Flathub Repository"
-/usr/bin/flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-if [ "$?" != 0 ] ; then
-        zenity --error \
-          --text="Adding Flathub Repo Failed"
-        exit 1
-fi
-echo "5"
-
-echo "# Replacing Fedora Flatpaks with Flathub Ones (this may take a while)"
-/usr/bin/flatpak install --user --noninteractive org.gnome.Platform//43
-/usr/bin/flatpak install --user --noninteractive --reinstall flathub $(flatpak list --app-runtime=org.fedoraproject.Platform --columns=application | tail -n +1 )
-if [ "$?" != 0 ] ; then
-        zenity --error \
-          --text="Replacing Fedora Flatpaks Failed"
-        exit 1
-fi
-echo "20"
-
-echo "Removing all preinstalled Flatpaks"
-/usr/bin/flatpak remove --system --noninteractive --all ||:
-if [ "$?" != 0 ] ; then
-        zenity --error \
-          --text="Removing all preinstalled flatpaks failed"
-        exit 1
-fi
-
-echo "# Removing Fedora Flatpak Repository"
-sudo -S /usr/bin/flatpak remote-delete fedora --force <<< "$password" ||:
-if [ "$?" != 0 ] ; then
-        zenity --error \
-          --text="Removing Fedora Flatpak Repo Failed"
-        exit 1
-fi
-echo "25"
-
-echo "# Installing flatpaks from recipe"
-flatpaks=$(yq '.flatpaks[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml)
-flatpaks_count=$(yq '.flatpaks[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml | wc -l)
-i=0
-for pkg in $flatpaks; do
-  echo "# Installing ${pkg}"
-  /usr/bin/flatpak install --user --noninteractive flathub $pkg
-  if [ "$?" != 0 ] ; then
-          zenity --error \
-            --text="Installing ${pkg} Failed"
-          exit 1
-  fi
-  i=$((i+1))
-  # Automatically calculates evenly spaced progess using bc, cuts everything after decimal point.
-  echo "${i}/${flatpaks_count} * (95-30) + 30" | bc -l | cut -d "." -f1 
-done
-
-echo "# Installing pipx"
-python3 -m pip install --user pipx
-
-echo "# Installing gnome-extensions-cli"
-pipx install gnome-extensions-cli --system-site-packages
-
-echo "# Installing extensions from recipe"
-extensions=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml)
-i=0
-for pkg in $extensions; do
-  echo "# Installing ${pkg}"
-  $HOME/.local/bin/gnome-extensions-cli install $pkg
-  if [ "$?" != 0 ] ; then
-          zenity --error \
-            --text="Installing ${pkg} Failed"
-          exit 1
-  fi
-  sleep 2
-  i=$((i+1))
-  # Automatically calculates evenly spaced progess using bc, cuts everything after decimal point.
-  echo "${i}/${flatpaks_count} * (95-30) + 30" | bc -l | cut -d "." -f1 
-done
-
-echo "Create gnome-terminal profiles"
-createNewProfile gruvbox-host eaa70d0f-2bff-4c94-8714-5c8815cf8b0f
-createNewProfile gruvbox-workspace 2ea51c17-a89c-4151-af02-925016c2a29a
-createNewProfile gruvbox-alpine 4c3035f9-08ef-4956-8cf2-c11fe365d146
-
-echo "Enabling Flatpak auto update"
-/usr/bin/systemctl --user enable --now flatpak-user-update.timer
-if [ "$?" != 0 ] ; then
-        zenity --error \
-          --text="Setting Flatpak Autoupdate Failed"
-        exit 1
-fi
-echo "100"
-
-) | 
-     
-   zenity --progress --title="cloud-os Desktop Firstboot" --percentage=0 --auto-close --no-cancel --width=300
-
-if [ "$?" != 0 ] ; then
-        zenity --error \
-          --text="Firstboot Configuration Error"
-fi
+#TODO add colors to INFO and ERROR
+#TODO if command fails give reminder to run `just firstboot` again to
+#finish from where left off
+case $input in
+  0) echo "Info: Step 1, Removing Filtered Flathub Repository"                                      
+    echo 0 > /tmp/firstboot-done
+    #TODO add test if flathub exist, only then run the next command
+    #FIXME can this /dev/null make sure i dont get re prompted with user
+    #password? Test at next run
+    sudo -S /usr/bin/flatpak remote-delete flathub --force <<< "$password"
+    if [ "$?" != 0 ] ; then echo "Error: Step 1 failed"; exit 1; fi
+    echo 1 > /tmp/firstboot-done
+    ;&
+  1) echo "Info: Step 2, Enabling Flathub Repository"
+    /usr/bin/flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    if [ "$?" != 0 ] ; then echo "Error: Step 2 failed"; exit 1; fi
+    echo 2 > /tmp/firstboot-done
+    ;&
+  2) echo "Info: Step 3, Replacing Fedora Flatpaks with Flathub Ones (this may take a while)"
+    /usr/bin/flatpak install --user --noninteractive org.gnome.Platform//43
+    if [ "$?" != 0 ] ; then echo "Error: Step 3 failed"; exit 1; fi
+    /usr/bin/flatpak install --user --noninteractive --reinstall flathub $(flatpak list --app-runtime=org.fedoraproject.Platform --columns=application | tail -n +1 )
+    if [ "$?" != 0 ] ; then echo "Error: Step 3 failed"; exit 1; fi
+    echo 3 > /tmp/firstboot-done
+    ;&
+  3) echo "Info: Step 4, Removing all preinstalled Flatpaks"
+    /usr/bin/flatpak remove --system --noninteractive --all
+    if [ "$?" != 0 ] ; then echo "Error: Step 4 failed"; exit 1; fi
+    echo 4 > /tmp/firstboot-done
+    ;&
+  4) echo "Info: Step 5, Removing Fedora Flatpak Repository"
+    sudo -S /usr/bin/flatpak remote-delete fedora --force <<< "$password"
+    if [ "$?" != 0 ] ; then echo "Error: Step 5 failed"; exit 1; fi
+    echo 5 > /tmp/firstboot-done
+    ;&
+  5) flatpaks_count=$(yq '.flatpaks[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml | wc -l)
+    echo "Info: Step 6, Installing $flatpaks_count Flatpaks from Recipe"
+    flatpaks=$(yq '.flatpaks[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml)
+    i=0
+    for pkg in $flatpaks; do
+      echo "Info: Installing ${pkg}, Flatpak $i out of $flatpaks_count"
+      /usr/bin/flatpak install --user --noninteractive flathub $pkg
+      i+=1
+    done
+    if [ "$?" != 0 ] ; then echo "Error: Step 6 failed"; exit 1; fi
+    echo 6 > /tmp/firstboot-done
+    ;&
+  6) echo "Info: Step 7, Installing Pipx"
+    python3 -m pip install --user pipx
+    if [ "$?" != 0 ] ; then echo "Error: Step 7 failed"; exit 1; fi
+    echo 7 > /tmp/firstboot-done
+    ;&
+  7) echo "Info: Step 8, Installing Gnome-Extensions-CLI"
+    pipx install gnome-extensions-cli --system-site-packages
+    if [ "$?" != 0 ] ; then echo "Error: Step 8 failed"; exit 1; fi
+    echo 8 > /tmp/firstboot-done
+    ;&
+  8) extensionsCount=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml | wc -l)
+    echo "Info: Step 9, Installing $extensionsCount Extensions from Recipe"
+    extensions=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml)
+    i=0
+    for pkg in $extensions; do
+      echo "Info: Installing ${pkg}, Extension $i out of $extensionsCount"
+      $HOME/.local/bin/gnome-extensions-cli install $pkg; sleep 2
+      i+=1
+    done
+    if [ "$?" != 0 ] ; then echo "Error: Step 9 failed"; exit 1; fi
+    echo 9 > /tmp/firstboot-done
+    ;&
+  9) echo "Info: Step 10, Set Dconf Settings"
+    declare defaultId=$(gsettings get org.gnome.Terminal.ProfilesList list | sed 's|.$||; s|^.||' )
+    gsettings set org.gnome.Terminal.ProfilesList list "[$defaultId, 'eaa70d0f-2bff-4c94-8714-5c8815cf8b0f', '2ea51c17-a89c-4151-af02-925016c2a29a', '4c3035f9-08ef-4956-8cf2-c11fe365d146']"
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:eaa70d0f-2bff-4c94-8714-5c8815cf8b0f/ visible-name 'gruvbox-host'
+    if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:2ea51c17-a89c-4151-af02-925016c2a29a/ visible-name 'gruvbox-workspace'
+    if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:4c3035f9-08ef-4956-8cf2-c11fe365d146/ visible-name 'gruvbox-alpine'
+    if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
+    gsettings set org.gnome.Terminal.Legacy.ProfileList default '2ea51c17-a89c-4151-af02-925016c2a29a'
+    if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
+    ## add uniemoji keyboard
+    gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 'uniemoji')]"
+    if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
+    #set compose key:
+    #gsettings set org.gnome.desktop.input-sources xkb-options "['lv3:ralt_switch']"
+    echo 10 > /tmp/firstboot-done
+    ;&
+  10) echo "Info: Step 11, Enabling Flatpak auto update"
+    /usr/bin/systemctl --user enable --now flatpak-user-update.timer
+    if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
+    echo 11 > /tmp/firstboot-done
+    ;;
+  *) echo "check mate";;
+esac

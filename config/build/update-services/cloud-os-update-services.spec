@@ -5,7 +5,7 @@ Version:        0.1
 Release:        1%{?dist}
 Summary:        cloud-os auto-update services
 License:        Apache-2.0
-URL:            https://github.com/cloud-os/config
+URL:            https://github.com/SimonWoodtli/cloud-os/tree/main/config/build/update-services
 
 BuildArch:      noarch
 Supplements:    update-services
