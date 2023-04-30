@@ -66,50 +66,44 @@ case $input in
     if [ "$?" != 0 ] ; then echo "Error: Step 6 failed"; exit 1; fi
     echo 6 > /tmp/firstboot-done
     ;&
-  6) echo "Info: Step 7, Installing Pipx"
-    python3 -m pip install --user pipx
-    if [ "$?" != 0 ] ; then echo "Error: Step 7 failed"; exit 1; fi
-    echo 7 > /tmp/firstboot-done
-    ;&
-  7) echo "Info: Step 8, Installing Gnome-Extensions-CLI"
-    pipx install gnome-extensions-cli --system-site-packages
-    if [ "$?" != 0 ] ; then echo "Error: Step 8 failed"; exit 1; fi
-    echo 8 > /tmp/firstboot-done
-    ;&
-  8) extensionsCount=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml | wc -l)
-    echo "Info: Step 9, Installing $extensionsCount Extensions from Recipe"
+  6) extensionsCount=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml | wc -l)
+    echo "Info: Step 7, Installing $extensionsCount Extensions from Recipe"
     extensions=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml)
     i=0
     for pkg in $extensions; do
       echo "Info: Installing ${pkg}, Extension $i out of $extensionsCount"
-      $HOME/.local/bin/gnome-extensions-cli install $pkg; sleep 2
+      /usr/bin/gnome-extensions-cli install $pkg; sleep 2
       i+=1
     done
-    if [ "$?" != 0 ] ; then echo "Error: Step 9 failed"; exit 1; fi
-    echo 9 > /tmp/firstboot-done
+    if [ "$?" != 0 ] ; then echo "Error: Step 7 failed"; exit 1; fi
+    echo 7 > /tmp/firstboot-done
     ;&
-  9) echo "Info: Step 10, Set Dconf Settings"
+  7) echo "Info: Step 8, Set Dconf Settings"
     declare defaultId=$(gsettings get org.gnome.Terminal.ProfilesList list | sed 's|.$||; s|^.||' )
     gsettings set org.gnome.Terminal.ProfilesList list "[$defaultId, 'eaa70d0f-2bff-4c94-8714-5c8815cf8b0f', '2ea51c17-a89c-4151-af02-925016c2a29a', '4c3035f9-08ef-4956-8cf2-c11fe365d146']"
     gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:eaa70d0f-2bff-4c94-8714-5c8815cf8b0f/ visible-name 'gruvbox-host'
-    if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
+    if [ "$?" != 0 ] ; then echo "Error: Step 8 failed"; exit 1; fi
     gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:2ea51c17-a89c-4151-af02-925016c2a29a/ visible-name 'gruvbox-workspace'
-    if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
+    if [ "$?" != 0 ] ; then echo "Error: Step 8 failed"; exit 1; fi
     gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:4c3035f9-08ef-4956-8cf2-c11fe365d146/ visible-name 'gruvbox-alpine'
-    if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
-    gsettings set org.gnome.Terminal.Legacy.ProfileList default '2ea51c17-a89c-4151-af02-925016c2a29a'
-    if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
+    if [ "$?" != 0 ] ; then echo "Error: Step 8 failed"; exit 1; fi
+    gsettings set org.gnome.Terminal.ProfileList default '2ea51c17-a89c-4151-af02-925016c2a29a'
+    if [ "$?" != 0 ] ; then echo "Error: Step 8 failed"; exit 1; fi
+    gsettings set org.gnome.Terminal.ProfilesList list "['eaa70d0f-2bff-4c94-8714-5c8815cf8b0f', '2ea51c17-a89c-4151-af02-925016c2a29a', '4c3035f9-08ef-4956-8cf2-c11fe365d146']"
+    if [ "$?" != 0 ] ; then echo "Error: Step 8 failed"; exit 1; fi
+    gsettings set org.gnome.desktop.interface enable-animations false
+    if [ "$?" != 0 ] ; then echo "Error: Step 8 failed"; exit 1; fi
     ## add uniemoji keyboard
     gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 'uniemoji')]"
-    if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
+    if [ "$?" != 0 ] ; then echo "Error: Step 8 failed"; exit 1; fi
     #set compose key:
     #gsettings set org.gnome.desktop.input-sources xkb-options "['lv3:ralt_switch']"
-    echo 10 > /tmp/firstboot-done
+    echo 8 > /tmp/firstboot-done
     ;&
-  10) echo "Info: Step 11, Enabling Flatpak auto update"
+  8) echo "Info: Step 9, Enabling Flatpak auto update"
     /usr/bin/systemctl --user enable --now flatpak-user-update.timer
-    if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
-    echo 11 > /tmp/firstboot-done
+    if [ "$?" != 0 ] ; then echo "Error: Step 9 failed"; exit 1; fi
+    echo 9 > /tmp/firstboot-done
     ;;
-  *) echo "check mate";;
+  *) echo "Warning: No case was found to run.";;
 esac

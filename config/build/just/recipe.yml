@@ -24,6 +24,9 @@ flatpaks:
   - com.github.muriloventuroso.pdftricks
   - org.libreoffice.LibreOffice
   - org.zealdocs.Zeal
+  - com.github.debauchee.barrier
+  - org.jitsi.jitsi-meet
+  - dev.k8slens.OpenLens
   - org.gnome.Geary
   - org.gtk.Gtk3theme.adw-gtk3
   - org.gtk.Gtk3theme.adw-gtk3-dark
@@ -32,10 +35,9 @@ extensions:
   - user-theme@gnome-shell-extensions.gcampax.github.com
   - just-perfection-desktop@just-perfection
   - auto-move-windows@gnome-shell-extensions.gcampax.github.com
-  - hide-panel-lite@fthx
+  - hidetopbar@mathieu.bidon.ca
   - trayIconsReloaded@selfmade.pl
   - allowlockedremotedesktop@kamens.us
   - rounded-window-corners@yilozt
-  - sound-output-device-chooser@kgshank.net
   - Vitals@CoreCoding.com
   - PrivacyMenu@stuarthayhurst

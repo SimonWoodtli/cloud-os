@@ -29,7 +29,6 @@ rpm-ostree install \
     /tmp/rpms/*.rpm \
     fedora-repos-archive
 
-##TODO add flatpaks here
 if [[ "${#INCLUDED_PACKAGES[@]}" -gt 0 && "${#EXCLUDED_PACKAGES[@]}" -eq 0 ]]; then
     rpm-ostree install \
         ${INCLUDED_PACKAGES[@]}
@@ -47,3 +46,5 @@ else
     echo "No packages to install."
 
 fi
+
+pip install --prefix=/usr gnome-extensions-cli
