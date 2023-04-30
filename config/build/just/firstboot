@@ -97,7 +97,11 @@ case $input in
     if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
     gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:4c3035f9-08ef-4956-8cf2-c11fe365d146/ visible-name 'gruvbox-alpine'
     if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
-    gsettings set org.gnome.Terminal.Legacy.ProfileList default '2ea51c17-a89c-4151-af02-925016c2a29a'
+    gsettings set org.gnome.Terminal.ProfileList default '2ea51c17-a89c-4151-af02-925016c2a29a'
+    if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
+    gsettings set org.gnome.Terminal.ProfilesList list "['eaa70d0f-2bff-4c94-8714-5c8815cf8b0f', '2ea51c17-a89c-4151-af02-925016c2a29a', '4c3035f9-08ef-4956-8cf2-c11fe365d146']"
+    if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
+    gsettings set org.gnome.desktop.interface enable-animations false
     if [ "$?" != 0 ] ; then echo "Error: Step 10 failed"; exit 1; fi
     ## add uniemoji keyboard
     gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 'uniemoji')]"
