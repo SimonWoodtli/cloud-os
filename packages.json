@@ -19,6 +19,8 @@
         "fzf",
         "vim",
         "tmux",
+        "gh",
+        "git",
         "apr",
         "apr-util",
         "nvme-cli",
@@ -26,7 +28,11 @@
         "btop",
         "nvtop",
         "python3-pip",
-        "ffmpegthumbnailer"
+        "ffmpegthumbnailer",
+        "yubikey-manager-qt",
+        "virt-install",
+        "virt-manager",
+        "virt-viewer"
         ],
      "exclude": [
         "libavcodec-free",

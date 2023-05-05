@@ -48,3 +48,9 @@ else
 fi
 
 pip install --prefix=/usr gnome-extensions-cli
+
+#https://www.vmware.com/go/getworkstation-linux need to update link
+#manually for newer versions, redirect not permitted :(
+curl -LJ https://download3.vmware.com/software/WKST-1700-LX/VMware-Workstation-Full-17.0.0-20800274.x86_64.bundle -o /tmp/workstation.bundle
+chmod 755 /tmp/workstation.bundle
+/tmp/workstation.bundle

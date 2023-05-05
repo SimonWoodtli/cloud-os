@@ -21,6 +21,9 @@ monospace-font-name="UbuntuMono Nerd Font Mono 16"
 [org/gnome/desktop/calendar]
 show-weekdate=true
 
+[org/gnome/desktop/screensaver]
+lock-enabled=false
+
 [org/gnome/desktop/sound]
 allow-volume-above-100-percent=true
 
