@@ -124,7 +124,7 @@ case $input in
     distrobox create --image ghcr.io/simonwoodtli/workspace-toolbox -n workspace -Y
     echo "${be}Info:$re Run the following commands to setup the workspace container:
 1. distrobox enter workspace
-2. just $HOME/Repos/github.com/SimonWoodtli/dotfiles/ workspace-setup
+2. distrobox-host-exec -Y just $HOME/Repos/github.com/SimonWoodtli/dotfiles/ firstboot-workspace
 3. exit
 Did you run the commands? [y/n] "
     read a0
@@ -179,6 +179,7 @@ Did you run the commands? [y/n] "
     ;&
   15) echo "${be}Info:$re Step 16, set cronjobs"
     ##TODO 1. add case for restoring cronjobs
+    ##TODO add vmware workstation pro
     echo 16 > /tmp/firstboot-done
     ;;
   *) echo "${yw}Warning:$re No case was found to run.";;
