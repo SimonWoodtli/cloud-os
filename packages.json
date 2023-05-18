@@ -24,6 +24,7 @@
         "apr",
         "apr-util",
         "nvme-cli",
+        "macchanger",
         "smartmontools",
         "btop",
         "nvtop",
