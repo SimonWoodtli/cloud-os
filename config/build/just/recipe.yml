@@ -1,4 +1,5 @@
-#use extension when available instead of hidamari flatpak: https://github.com/jeffshee/gnome-ext-hanabi
+## use extension when available instead of hidamari flatpak: https://github.com/jeffshee/gnome-ext-hanabi
+## installed during host runtime firstboot script:
 flatpaks:
   - com.github.tchx84.Flatseal
   - com.mattjakeman.ExtensionManager
