@@ -39,37 +39,45 @@ read -s -p "[sudo] password for $(whoami): " password
 #TODO if command fails give reminder to run `just firstboot` again to
 #finish from where left off
 case $input in
-  0) echo "${be}Info:$re Step 1, Removing Filtered Flathub Repository"                                      
+  0) echo "${be}Info:$re Step 0, Clone Git Repos"
     echo 0 > /tmp/firstboot-done
+    folder="$HOME/Repos/github.com/SimonWoodtli"
+    mkdir -p "$folder"
+    git -C "$folder" clone https://github.com/SimonWoodtli/dotfiles.git &&\
+    git -C "$folder" clone https://github.com/SimonWoodtli/zet.git
+    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 0 failed"; exit 1; fi
+    echo 1 > /tmp/firstboot-done
+    ;&
+  1) echo "${be}Info:$re Step 1, Removing Filtered Flathub Repository"                                      
     if [[ "$(flatpak remotes | grep -q flathub; echo $?)" -eq 0 ]]; then
       sudo -S /usr/bin/flatpak remote-delete flathub --force <<< "$password"
       if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 1 failed"; exit 1; fi
     fi
-    echo 1 > /tmp/firstboot-done
-    ;&
-  1) echo "${be}Info:$re Step 2, Enabling Flathub Repository"
-    /usr/bin/flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 2 failed"; exit 1; fi
     echo 2 > /tmp/firstboot-done
     ;&
-  2) echo "${be}Info:$re Step 3, Replacing Fedora Flatpaks with Flathub Ones (this may take a while)"
+  2) echo "${be}Info:$re Step 2, Enabling Flathub Repository"
+    /usr/bin/flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 2 failed"; exit 1; fi
+    echo 3 > /tmp/firstboot-done
+    ;&
+  3) echo "${be}Info:$re Step 3, Replacing Fedora Flatpaks with Flathub Ones (this may take a while)"
     /usr/bin/flatpak install --user --noninteractive org.gnome.Platform//43
     if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 3 failed"; exit 1; fi
     /usr/bin/flatpak install --user --noninteractive --reinstall flathub $(flatpak list --app-runtime=org.fedoraproject.Platform --columns=application | tail -n +1 )
     if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 3 failed"; exit 1; fi
-    echo 3 > /tmp/firstboot-done
-    ;&
-  3) echo "${be}Info:$re Step 4, Removing all preinstalled Flatpaks"
-    /usr/bin/flatpak remove --system --noninteractive --all
-    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 4 failed"; exit 1; fi
     echo 4 > /tmp/firstboot-done
     ;&
-  4) echo "${be}Info:$re Step 5, Removing Fedora Flatpak Repository"
-    sudo -S /usr/bin/flatpak remote-delete fedora --force <<< "$password"
-    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 5 failed"; exit 1; fi
+  4) echo "${be}Info:$re Step 4, Removing all preinstalled Flatpaks"
+    /usr/bin/flatpak remove --system --noninteractive --all
+    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 4 failed"; exit 1; fi
     echo 5 > /tmp/firstboot-done
     ;&
-  5) flatpaks_count=$(yq '.flatpaks[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml | wc -l)
+  5) echo "${be}Info:$re Step 5, Removing Fedora Flatpak Repository"
+    sudo -S /usr/bin/flatpak remote-delete fedora --force <<< "$password"
+    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 5 failed"; exit 1; fi
+    echo 6 > /tmp/firstboot-done
+    ;&
+  6) flatpaks_count=$(yq '.flatpaks[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml | wc -l)
     echo "${be}Info:$re Step 6, Installing $flatpaks_count Flatpaks from Recipe"
     flatpaks=$(yq '.flatpaks[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml)
     i=0
@@ -78,18 +86,19 @@ case $input in
       /usr/bin/flatpak install --user --noninteractive flathub $pkg
       i+=1
     done
+    $HOME/Repos/github.com/SimonWoodtli/dotfiles/install/install-rustdesk
     if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 6 failed"; exit 1; fi
-    echo 6 > /tmp/firstboot-done
+    echo 7 > /tmp/firstboot-done
     ;&
-  6) extensionsCount=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml | wc -l)
+  7) extensionsCount=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml | wc -l)
     echo "${be}Info:$re Step 7, Installing $extensionsCount Extensions from Recipe"
     extensions=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml)
     i=0
     /usr/bin/gnome-extensions-cli install "${extensions[@]}"
     if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 7 failed"; exit 1; fi
-    echo 7 > /tmp/firstboot-done
+    echo 8 > /tmp/firstboot-done
     ;&
-  7) echo "${be}Info:$re Step 8, Set Dconf Settings"
+  8) echo "${be}Info:$re Step 8, Set Dconf Settings"
     declare defaultId=$(gsettings get org.gnome.Terminal.ProfilesList list | sed 's|.$||; s|^.||' )
     gsettings set org.gnome.Terminal.ProfilesList list "[$defaultId, 'eaa70d0f-2bff-4c94-8714-5c8815cf8b0f', '2ea51c17-a89c-4151-af02-925016c2a29a', '4c3035f9-08ef-4956-8cf2-c11fe365d146']"
     gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:eaa70d0f-2bff-4c94-8714-5c8815cf8b0f/ visible-name 'gruvbox-host'
@@ -109,47 +118,50 @@ case $input in
     if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 8 failed"; exit 1; fi
     #set compose key:
     #gsettings set org.gnome.desktop.input-sources xkb-options "['lv3:ralt_switch']"
-    echo 8 > /tmp/firstboot-done
-    ;&
-  8) echo "${be}Info:$re Step 9, Enabling Flatpak auto update"
-    /usr/bin/systemctl --user enable --now flatpak-user-update.timer
-    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 9 failed"; exit 1; fi
     echo 9 > /tmp/firstboot-done
     ;&
-  9) echo "${be}Info:$re Step 10, create and setup workspace distrobox"
-    mkdir -p $HOME/Repos/github.com/SimonWoodtli
-    cd $HOME/Repos/github.com/SimonWoodtli
-    git clone https://github.com/SimonWoodtli/dotfiles.git
-    git clone https://github.com/SimonWoodtli/zet.git
+  9) echo "${be}Info:$re Step 9, Enabling Flatpak auto update"
+    /usr/bin/systemctl --user enable --now flatpak-user-update.timer
+    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 9 failed"; exit 1; fi
+    echo 10 > /tmp/firstboot-done
+    ;&
+  10) echo "${be}Info:$re Step 10, create and setup workspace distrobox"
     distrobox create --image ghcr.io/simonwoodtli/workspace-toolbox -n workspace -Y
     echo "${be}Info:$re Run the following commands to setup the workspace container:
-1. distrobox enter workspace
-2. distrobox-host-exec -Y just $HOME/Repos/github.com/SimonWoodtli/dotfiles/ firstboot-workspace
-3. exit
+1. gnome-terminal (or tmux/tab whatever you prefer)
+2. distrobox enter workspace
+3. chezmoi -S $HOME/Repos/github.com/SimonWoodtli/dotfiles init --apply
+4. exec bash -l
+5. just -f $HOME/Repos/github.com/SimonWoodtli/dotfiles/.justfile firstboot-workspace
 Did you run the commands? [y/n] "
     read a0
     while [[ $a0 != "y" ]]; do
       echo "${yw}Warning:$re Prompt requires a 'y' for yes."
       echo "Did you run the commands? [y/n] "; read a0
     done
-    echo 10 > /tmp/firstboot-done
+    echo 11 > /tmp/firstboot-done
     ;&
-  10) echo "${be}Info:$re Step 11, create Dirs"
+  11) git clone https://git.sr.ht/~geb/dotool /tmp/dotool 
+    cd /tmp/dotool 
+    ./install.sh
+    echo 12 > /tmp/firstboot-done
+    ;&
+  12) echo "${be}Info:$re Step 11, create Dirs"
     [[ $(whoami) == "xnasero" ]] || exit 0
     mkdir -p $HOME/VirtualMachines $HOME/Repos/github.com/SimonWoodtli/{myrepos,webdev}
     for i in "${Containers[@]}"; do mkdir -p $HOME/Containers/$i; done
     for i in "${mnt[@]}"; do sudo -S mkdir -p /mnt/$i <<< "$password"; done
-    echo 11 > /tmp/firstboot-done
+    echo 13 > /tmp/firstboot-done
     ;&
-  11) echo "${be}Info:$re Step 12, Enabling auto-mount devices"
+  13) echo "${be}Info:$re Step 12, Enabling auto-mount devices"
     echo "LABEL=usb-luks /mnt/usb-luks ext4 defaults 0 2" | sudo -S tee -a /etc/fstab <<< "$password"
     echo "LABEL=usb-ntfs /mnt/usb-ntfs ntfs-3g defaults,nls=utf8,umask=000,dmask=027,fmask=137,uid=1000,gid=1000 0 2" | sudo -S tee -a /etc/fstab <<< "$password"
     echo "usb-luks LABEL=crypto-usb none nofail" | sudo -S tee -a /etc/crypttab <<< "$password"
     echo "LABEL=2ndHDD /mnt/2ndHDD ext4 defaults 0 2" | sudo -S tee -a /etc/fstab <<< "$password"
     echo "2ndHDD LABEL=crypto-2ndHDD none" | sudo -S tee -a /etc/crypttab <<< "$password"
-    echo 12 > /tmp/firstboot-done
+    echo 14 > /tmp/firstboot-done
     ;&
-  12) echo "${be}Info:$re Step 13, Cloning Repos"
+  14) echo "${be}Info:$re Step 13, Cloning Repos"
     echo "${yw}Warning:$re Make sure you have manually mounted your usb-stick to /mnt/usb-luks. [y/n]"
     read a1
     if [[ $a1 == "y" ]]; then
@@ -166,21 +178,21 @@ Did you run the commands? [y/n] "
     gh repo clone SimonWoodtli/projects
     gh repo clone SimonWoodtli/zet
     gh repo clone SimonWoodtli/www-template webdev/simonwoodtli.com
-    echo 13 > /tmp/firstboot-done
-    ;&
-  13) echo "${be}Info:$re Step 14, set hostname "
-    sudo hostnamectl set-hostname "skynet"
-    echo 14 > /tmp/firstboot-done
-    ;&
-  14) echo "${be}Info:$re Step 15, change large apple keyboard F-keys as default "
-    echo options hid_apple fnmode="2" | sudo -S tee -a /etc/modprobe.d/hid_apple.conf <<< "$password"
-    sudo -S dracut --regenerate-all --force <<< "$password"
     echo 15 > /tmp/firstboot-done
     ;&
-  15) echo "${be}Info:$re Step 16, set cronjobs"
+  15) echo "${be}Info:$re Step 14, set hostname "
+    sudo hostnamectl set-hostname "skynet"
+    echo 16 > /tmp/firstboot-done
+    ;&
+  16) echo "${be}Info:$re Step 15, change large apple keyboard F-keys as default "
+    echo options hid_apple fnmode="2" | sudo -S tee -a /etc/modprobe.d/hid_apple.conf <<< "$password"
+    sudo -S dracut --regenerate-all --force <<< "$password"
+    echo 17 > /tmp/firstboot-done
+    ;&
+  17) echo "${be}Info:$re Step 16, set cronjobs"
     ##TODO 1. add case for restoring cronjobs
     ##TODO add vmware workstation pro
-    echo 16 > /tmp/firstboot-done
+    echo 18 > /tmp/firstboot-done
     ;;
   *) echo "${yw}Warning:$re No case was found to run.";;
 esac
