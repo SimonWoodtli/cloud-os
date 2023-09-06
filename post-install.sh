@@ -12,6 +12,7 @@ systemctl unmask dconf-update.service
 systemctl enable dconf-update.service
 systemctl enable sshd
 systemctl enable pcscd
+systemctl enable ydotool
 fc-cache -f /usr/share/fonts #FIXME not sure if not a folder needs to be specified, gotta test
 sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf
 sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf
