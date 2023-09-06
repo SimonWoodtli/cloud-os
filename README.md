@@ -6,17 +6,22 @@
 
 My personal Linux Fedora Silverblue image with a cloud-native approach. 
 
-This project is possible thanks to the amazing work from [uBlue] 🙏  
-I learned a lot from their codebase and used that knowledge to develop my own
-offshoot of it.
-
 ## Installation
 
-1. verify image: `cosign verify --key cosign.pub ghcr.io/simonwoodtli/cloud-os:latest` (NEED TO figure out if URL can be used for cosign.pub instead of locally safing it)
+1. Verify image: `cosign verify --key https://raw.githubusercontent.com/SimonWoodtli/cloud-os/main/cosign.pub ghcr.io/simonwoodtli/cloud-os:latest`
+2. Install [Fedora Silverblue][silverblue] and boot it up
+3. Rebase to cloud-os
 
-After installing Silverblue simply rebase to my up to date custom image.  
-`sudo rpm-ostree rebase --experimental ostree-unverified-registry:ghcr.io/simonwoodtli/cloud-os:latest` 
+```
+sudo rpm-ostree rebase --experimental ostree-unverified-registry:ghcr.io/simonwoodtli/cloud-os:latest
+systemctl reboot
+```
 
+4. Setup cloud-os
+
+```
+just firstboot
+```
 
 ## Features
 
@@ -24,7 +29,7 @@ After installing Silverblue simply rebase to my up to date custom image.
 * Reduces time to configure Linux on a fresh install drastically
 * Ships with flatpak, flathub only
 * Ships with distrobox
-* Ships with my terminal-centric [workspace]
+* Ships with my terminal-centric alpine [workspace]
 * Ships with Qemu/Virt-Manager or VMware (not sure yet)
 * Auto updates the base Fedora image and the my additional packages on a daily
   basis.
@@ -32,8 +37,8 @@ After installing Silverblue simply rebase to my up to date custom image.
 
 ![Alt](https://repobeats.axiom.co/api/embed/fa9e3f63018894aee1a032e23926a68beb110808.svg "Repobeats analytics image")
 
-[uBlue]: <https://github.com/ublue-os>
 [workspace]: <https://github.com/SimonWoodtli/workspace>
+[silverblue]: <https://fedoraproject.org/silverblue/download/>
 
 Related:
 
