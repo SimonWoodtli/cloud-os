@@ -7,8 +7,8 @@ declare yw=$'\033[33m'
 declare bo=$'\033[1m'                                                         
 declare re=$'\033[0m'
 
-declare mnt=( 2ndHDD 2TB-HDD usb-luks usb-ntfs )                                
-declare Containers=( 2TBHDD pcloudFiles pcloudMorefiles )                       
+declare -a mnt=("2ndHDD" "2TB-HDD" "usb-luks" "usb-ntfs")                                
+declare -a Containers=("2TBHDD" "pcloudFiles" "pcloudMorefiles")                       
 declare -i major=${BASH_VERSION:0:1}
 declare input="0"
 declare -i i=0
@@ -90,45 +90,37 @@ case $input in
     if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 6 failed"; exit 1; fi
     echo 7 > /tmp/firstboot-done
     ;&
-  7) extensionsCount=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml | wc -l)
-    echo "${be}Info:$re Step 7, Installing $extensionsCount Extensions from Recipe"
-    extensions=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml)
-    i=0
-    /usr/bin/gnome-extensions-cli install "${extensions[@]}"
-    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 7 failed"; exit 1; fi
-    echo 8 > /tmp/firstboot-done
-    ;&
-  8) echo "${be}Info:$re Step 8, Set Dconf Settings"
+  7) echo "${be}Info:$re Step 7, Set Dconf Settings"
     declare defaultId=$(gsettings get org.gnome.Terminal.ProfilesList list | sed 's|.$||; s|^.||' )
     gsettings set org.gnome.Terminal.ProfilesList list "[$defaultId, 'eaa70d0f-2bff-4c94-8714-5c8815cf8b0f', '2ea51c17-a89c-4151-af02-925016c2a29a', '4c3035f9-08ef-4956-8cf2-c11fe365d146']"
     gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:eaa70d0f-2bff-4c94-8714-5c8815cf8b0f/ visible-name 'gruvbox-host'
-    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 8 failed"; exit 1; fi
+    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 7 failed"; exit 1; fi
     gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:2ea51c17-a89c-4151-af02-925016c2a29a/ visible-name 'gruvbox-workspace'
-    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 8 failed"; exit 1; fi
+    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 7 failed"; exit 1; fi
     gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:4c3035f9-08ef-4956-8cf2-c11fe365d146/ visible-name 'gruvbox-alpine'
-    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 8 failed"; exit 1; fi
+    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 7 failed"; exit 1; fi
     gsettings set org.gnome.Terminal.ProfilesList default '2ea51c17-a89c-4151-af02-925016c2a29a'
-    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 8 failed"; exit 1; fi
+    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 7 failed"; exit 1; fi
     gsettings set org.gnome.Terminal.ProfilesList list "['eaa70d0f-2bff-4c94-8714-5c8815cf8b0f', '2ea51c17-a89c-4151-af02-925016c2a29a', '4c3035f9-08ef-4956-8cf2-c11fe365d146']"
-    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 8 failed"; exit 1; fi
+    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 7 failed"; exit 1; fi
     gsettings set org.gnome.desktop.interface enable-animations false
-    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 8 failed"; exit 1; fi
+    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 7 failed"; exit 1; fi
     ## add uniemoji keyboard
     gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 'uniemoji')]"
-    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 8 failed"; exit 1; fi
+    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 7 failed"; exit 1; fi
     #set compose key:
     #gsettings set org.gnome.desktop.input-sources xkb-options "['lv3:ralt_switch']"
+    echo 8 > /tmp/firstboot-done
+    ;&
+  8) echo "${be}Info:$re Step 8, Enabling Flatpak auto update"
+    /usr/bin/systemctl --user enable --now flatpak-user-update.timer
+    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 8 failed"; exit 1; fi
     echo 9 > /tmp/firstboot-done
     ;&
-  9) echo "${be}Info:$re Step 9, Enabling Flatpak auto update"
-    /usr/bin/systemctl --user enable --now flatpak-user-update.timer
-    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 9 failed"; exit 1; fi
-    echo 10 > /tmp/firstboot-done
-    ;&
-  10) echo "${be}Info:$re Step 10, create and setup workspace distrobox"
-    distrobox create --image ghcr.io/simonwoodtli/workspace-toolbox -n workspace -Y
+  9) echo "${be}Info:$re Step 9, create and setup workspace distrobox"
+    distrobox create --image ghcr.io/simonwoodtli/workspace-alpine -n workspace -Y
     echo "${be}Info:$re Run the following commands to setup the workspace container:
-1. gnome-terminal (or tmux/tab whatever you prefer)
+1. open new terminal pane to get a shell to enter cmds (needs to be host)
 2. distrobox enter workspace
 3. chezmoi -S $HOME/Repos/github.com/SimonWoodtli/dotfiles init --apply
 4. exec bash -l
@@ -139,60 +131,110 @@ Did you run the commands? [y/n] "
       echo "${yw}Warning:$re Prompt requires a 'y' for yes."
       echo "Did you run the commands? [y/n] "; read a0
     done
+    echo 10 > /tmp/firstboot-done
+    ;&
+  10) echo "${be}Info:$re Step 10, setup ydotool"
+    #groupadd doesn't wanna add input into /etc/group already exists
+    #`getent group` shows it but its not in /etc/group ....
+    ##TEST is input id always 104?
+    ##TEST: try to add input grp and user directly to /etc/group
+    sudo -S sh -c 'printf "%s\n" "input:x:104:$(whoami)" >> /etc/group' <<< "$password"
+    ##Fix: No sudo/pw to use tool:
+    sudo -S cp /usr/bin/ydotool $HOME/.local/bin #can't directly chmod /usr cause immutable ;o
+    sudo chmod +s $HOME/.local/bin
+    ## `usermod -aG input xnasero` did not work
+    #
+    #sudo -S gpasswd -a $(whoami) input <<< "$password"
     echo 11 > /tmp/firstboot-done
     ;&
-  11) git clone https://git.sr.ht/~geb/dotool /tmp/dotool 
-    cd /tmp/dotool 
-    ./install.sh
+  11) echo "${be}Info:$re The rest of the installation process requires user input to configure, please be present. To proceed please press <y>."
+    read a2                                                                         
+    while [[ $a2 != "y" ]]; do                                                      
+      echo "${yw}Warning:$re Prompt requires a 'y'. "; read a2                      
+    done  
+    extensionsCount=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml | wc -l)
+    echo "${be}Info:$re Step 11, Installing $extensionsCount Extensions from Recipe"
+    extensions=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml)
+    #don't quote extensions array otherwise they wont print onto one line and install fails
+    /usr/bin/gnome-extensions-cli install ${extensions[@]}
+    if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 17 failed"; exit 1; fi
     echo 12 > /tmp/firstboot-done
-    ;&
+    ;;
   12) echo "${be}Info:$re Step 11, create Dirs"
     [[ $(whoami) == "xnasero" ]] || exit 0
     mkdir -p $HOME/VirtualMachines $HOME/Repos/github.com/SimonWoodtli/{myrepos,webdev}
-    for i in "${Containers[@]}"; do mkdir -p $HOME/Containers/$i; done
-    for i in "${mnt[@]}"; do sudo -S mkdir -p /mnt/$i <<< "$password"; done
-    echo 13 > /tmp/firstboot-done
+    for x in "${Containers[@]}"; do mkdir -p "$HOME/Containers/$x"; done
+    for x in "${mnt[@]}"; do sudo -S mkdir -p "/mnt/$x" <<< "$password"; done
+    ##mnt has root ownership that is annoying to deal with any devices, so I changed it to current user
+    sudo chown -R `whoami`:`whoami` /mnt
+    ## seperate data dirs from OS hdd, so dealing with it becomes a bit more convenient
+    rm -rf $HOME/{Documents,Pictures,Templates,Videos}
+    ## cause workspace container has no access to /mnt/2ndHDD but /run/host/var/mnt/2ndHDD
+    folder="/run/host/var/mnt/2ndHDD"
+    ##TEST: not sure if symlinking from host will work. SO later symlinks
+    ##work correct for host and workspace, if not working run symlink cmds from within container
+    ln -sf "$folder/Documents" "$HOME/Documents"
+    ln -sf "$folder/Pictures" "$HOME/Pictures"
+    ln -sf "$folder/Templates" "$HOME/Templates"
+    ln -sf "$folder/Videos" "$HOME/Videos"
+    echo 12 > /tmp/firstboot-done
     ;&
   13) echo "${be}Info:$re Step 12, Enabling auto-mount devices"
-    echo "LABEL=usb-luks /mnt/usb-luks ext4 defaults 0 2" | sudo -S tee -a /etc/fstab <<< "$password"
-    echo "LABEL=usb-ntfs /mnt/usb-ntfs ntfs-3g defaults,nls=utf8,umask=000,dmask=027,fmask=137,uid=1000,gid=1000 0 2" | sudo -S tee -a /etc/fstab <<< "$password"
-    echo "usb-luks LABEL=crypto-usb none nofail" | sudo -S tee -a /etc/crypttab <<< "$password"
-    echo "LABEL=2ndHDD /mnt/2ndHDD ext4 defaults 0 2" | sudo -S tee -a /etc/fstab <<< "$password"
-    echo "2ndHDD LABEL=crypto-2ndHDD none" | sudo -S tee -a /etc/crypttab <<< "$password"
-    echo 14 > /tmp/firstboot-done
+    sudo -S sh -c 'printf "%s\n" "LABEL=usb-luks /mnt/usb-luks ext4 defaults 0 2" >> /etc/fstab' <<< "$password"
+    sudo -S sh -c 'printf "%s\n" "LABEL=usb-ntfs /mnt/usb-ntfs ntfs-3g defaults,nls=utf8,umask=000,dmask=027,fmask=137,uid=1000,gid=1000 0 2" >> /etc/fstab' <<< "$password"
+    sudo -S sh -c 'printf "%s\n" "usb-luks LABEL=crypto-usb none nofail" >> /etc/crypttab' <<< "$password"
+    sudo -S sh -c 'printf "%s\n" "LABEL=2ndHDD /mnt/2ndHDD ext4 defaults 0 2" >> /etc/fstab' <<< "$password"
+    sudo -S sh -c 'printf "%s\n" "2ndHDD LABEL=crypto-2ndHDD none" >> /etc/crypttab' <<< "$password"
+    echo 13 > /tmp/firstboot-done
     ;&
   14) echo "${be}Info:$re Step 13, Cloning Repos"
     echo "${yw}Warning:$re Make sure you have manually mounted your usb-stick to /mnt/usb-luks. [y/n]"
     read a1
-    if [[ $a1 == "y" ]]; then
-      cd $HOME
-      git clone /mnt/usb-luks/Private.git
-      cd $HOME/Private
-      ./setup
-      git clone /mnt/usb-luks/zet.git
-    fi
-    cd $HOME/Repos/github.com/SimonWoodtli
-    #TODO maybe there is a git cmd to change the protocol from http to gh/ssh
-    rm -rf dotfiles zet
-    gh repo clone SimonWoodtli/dotfiles
-    gh repo clone SimonWoodtli/projects
-    gh repo clone SimonWoodtli/zet
-    gh repo clone SimonWoodtli/www-template webdev/simonwoodtli.com
-    echo 15 > /tmp/firstboot-done
+    while [[ $a1 != "y" ]]; do
+      echo "${yw}Warning:$re Prompt requires a 'y'. "; read a1
+    done
+    ## Get private repos:
+    git -C "$HOME" clone /mnt/usb-luks/Private.git
+    #FIXME from within your workspace run: `git remote set-url origin /run/host/var/mnt/usb-luks/Private.git`
+    "$HOME/Private/setup"
+    ##TODO not sure if after private/setup runs the ssh and gh already is
+    ##working without reloading shell
+    #source $HOME/.bashrc
+    git -C "$HOME/Private" clone /mnt/usb-luks/zet.git
+    #FIXME from within your workspace run: `git remote set-url origin /run/host/var/mnt/usb-luks/zet.git`
+    ## Get github repos:
+    folder="$HOME/Repos/github.com/SimonWoodtli"
+    ## change protocol from https to ssh for dotfiles,zet with `git
+    ## remote set-url origin URL` does not work -> can't push
+    rm -rf "$folder/dotfiles" "$folder/zet"
+    gh repo clone SimonWoodtli/dotfiles "$folder/dotfiles"
+    gh repo clone SimonWoodtli/zet "$folder/zet"
+    ## get other repos
+    gh repo clone SimonWoodtli/projects "$folder/projects"
+    gh repo clone SimonWoodtli/lab "$folder/lab"
+    gh repo clone SimonWoodtli/test "$folder/myrepos/test"
+    gh repo clone SimonWoodtli/www-template "$folder/webdev/www-template"
+    echo 14 > /tmp/firstboot-done
     ;&
   15) echo "${be}Info:$re Step 14, set hostname "
     sudo hostnamectl set-hostname "skynet"
+    echo 15 > /tmp/firstboot-done
+    ;&
+  16) echo "${be}Info:$re Step 15, change large apple keyboard F-keys as default"
+    ##No longer working with hid_apple.conf with or without quoted number
+    #sudo -S sh -c 'printf "%s\n" "options hid_apple fnmode=2" >> /etc/modprobe.d/hid_apple.conf' <<< "$password"
+    #sudo -S sh -c 'printf "%s\n" "options hid_apple fnmode=\"2\"" >> /etc/modprobe.d/hid_apple.conf' <<< "$password"
+    #sudo -S sh -c 'printf "%s\n" "install_items+=/etc/modprobe.d/hid_apple.conf" >> /etc/dracut.conf.d/hid_apple.conf' <<< "$password"
+    #sudo dracut --regenerate-all --force
+    ## Use grub boot parameter instead
+    sudo -S grubby --update-kernel=ALL --args="hid_apple.fnmode=2" <<< "$password"
     echo 16 > /tmp/firstboot-done
     ;&
-  16) echo "${be}Info:$re Step 15, change large apple keyboard F-keys as default "
-    echo options hid_apple fnmode="2" | sudo -S tee -a /etc/modprobe.d/hid_apple.conf <<< "$password"
-    sudo -S dracut --regenerate-all --force <<< "$password"
-    echo 17 > /tmp/firstboot-done
-    ;&
   17) echo "${be}Info:$re Step 16, set cronjobs"
-    ##TODO 1. add case for restoring cronjobs
+    ##TODO add case for restoring cronjobs
     ##TODO add vmware workstation pro
-    echo 18 > /tmp/firstboot-done
-    ;;
+    echo 17 > /tmp/firstboot-done
+    echo "${be}Info:$re Finished Firstboot, please reboot system with systemctl reboot -i"
+    ;&
   *) echo "${yw}Warning:$re No case was found to run.";;
 esac
