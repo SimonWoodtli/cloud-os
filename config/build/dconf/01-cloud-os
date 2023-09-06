@@ -101,19 +101,19 @@ command='flatpak run org.ferdium.Ferdium'
 name='ferdium'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6]
-binding='<Control><Alt>w'
+binding='<Super>w'
 command='__bmw-gui'
-name='bookmark-linkhandler-w'
+name='bookmark-linkhandler-work'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7]
-binding='<Control><Alt>p'
+binding='<Super>r'
 command='__bmw-gui'
-name='bookmark-linkhandler-p'
+name='bookmark-linkhandler-private'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8]
-binding='<Control><Alt>c'
+binding='<Super>e'
 command='__bmw-gui'
-name='bookmark-linkhandler-c'
+name='bookmark-linkhandler-crypto'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9]
 binding='<Super><Alt>t'
@@ -127,8 +127,13 @@ name='workspace-terminal'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11]
 binding='<Super><Shift>t'
-command='gnome-terminal --full-screen --profile=gruvbox-alpine'
-name='alpine-terminal'
+command='gnome-terminal --full-screen --profile=gruvbox-ubuntu'
+name='ubuntu-terminal'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12]
+binding='<Super>k'
+command='flatpak run org.keepassxc.KeePassXC'
+name='keepass'
 
 [org/gnome/software]
 allow-updates=false
@@ -139,7 +144,7 @@ first-run=false
 [org/gnome/settings-daemon/plugins/media-keys]
 control-center=['Tools']
 custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11/']
-email=['<Super>e']
+email=['<Super>g']
 home=@as []
 screensaver=@as []
 
@@ -199,7 +204,7 @@ background-transparency-percent=50
 bold-color-same-as-fg=true
 cursor-blink-mode='on'
 cursor-shape='block'
-custom-command='distrobox-enter -n alpine'
+custom-command='distrobox-enter -n ubuntu'
 font='UbuntuMono Nerd Font Mono 16'
 foreground-color='rgb(235,219,178)'
 palette=['rgb(40,40,40)', 'rgb(204,36,29)', 'rgb(152,151,26)', 'rgb(215,153,33)', 'rgb(69,133,136)', 'rgb(177,98,134)', 'rgb(104,157,106)', 'rgb(168,153,132)', 'rgb(146,131, 116)', 'rgb(251,73,52)', 'rgb(184,187,38)', 'rgb(250,189,47)', 'rgb(131,165,152)', 'rgb(211,134,155)', 'rgb(174,192,124)', 'rgb(235,219,178)']
@@ -210,4 +215,4 @@ use-custom-command=true
 use-system-font=false
 use-theme-colors=false
 use-transparent-background=true
-visible-name='gruvbox-alpine'
+visible-name='gruvbox-ubuntu'
