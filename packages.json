@@ -35,6 +35,8 @@
         "samba-client",
         "apr-util",
         "nvme-cli",
+        "iotop",
+        "sysstat",
         "macchanger",
         "smartmontools",
         "btop",

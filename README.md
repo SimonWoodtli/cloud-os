@@ -8,9 +8,14 @@ My personal Linux Fedora Silverblue image with a cloud-native approach.
 
 ## Installation
 
-1. Verify image: `cosign verify --key https://raw.githubusercontent.com/SimonWoodtli/cloud-os/main/cosign.pub ghcr.io/simonwoodtli/cloud-os:latest`
+1. Verify image: 
+
+```
+cosign verify --key https://raw.githubusercontent.com/SimonWoodtli/cloud-os/main/cosign.pub ghcr.io/simonwoodtli/cloud-os:latest
+```
+
 2. Install [Fedora Silverblue][silverblue] and boot it up
-3. Rebase to cloud-os
+3. Rebase to cloud-os and reboot
 
 ```
 sudo rpm-ostree rebase --experimental ostree-unverified-registry:ghcr.io/simonwoodtli/cloud-os:latest
