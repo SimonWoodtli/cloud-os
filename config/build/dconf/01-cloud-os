@@ -107,12 +107,12 @@ name='bookmark-linkhandler-work'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7]
 binding='<Super>r'
-command='__bmw-gui'
-name='bookmark-linkhandler-private'
+command='__bmp-gui'
+name='bookmark-linkhandler-personal'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8]
 binding='<Super>e'
-command='__bmw-gui'
+command='__bmc-gui'
 name='bookmark-linkhandler-crypto'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9]
