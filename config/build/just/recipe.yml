@@ -13,6 +13,11 @@ flatpaks:
   - com.jgraph.drawio.desktop
   - net.ankiweb.Anki
   - com.calibre_ebook.calibre
+  - com.valvesoftware.Steam
+  - com.vysp3r.ProtonPlus
+  - net.lutris.Lutris
+  - com.usebottles.bottles
+  - com.heroicgameslauncher.hgl
   - com.gitlab.tipp10.tipp10
   - com.github.xournalpp.xournalpp
   - no.mifi.losslesscut
