@@ -1,14 +1,14 @@
 #!/bin/bash
-declare cn=$'\033[36m'                                                        
-declare rd=$'\033[31m'                                                         
-declare gn=$'\033[32m'                                                       
-declare be=$'\033[34m'                                                        
-declare yw=$'\033[33m'                                                      
-declare bo=$'\033[1m'                                                         
+declare cn=$'\033[36m'
+declare rd=$'\033[31m'
+declare gn=$'\033[32m'
+declare be=$'\033[34m'
+declare yw=$'\033[33m'
+declare bo=$'\033[1m'
 declare re=$'\033[0m'
 
-declare -a mnt=("2ndHDD" "2TB-HDD" "usb-luks" "usb-ntfs")                                
-declare -a Containers=("2TBHDD" "pcloudFiles" "pcloudMorefiles")                       
+declare -a mnt=("2ndHDD" "2TB-HDD" "usb-luks" "usb-ntfs")
+declare -a Containers=("2TBHDD" "pcloudFiles" "pcloudMorefiles")
 declare -i major=${BASH_VERSION:0:1}
 declare input="0"
 declare -i i=0
@@ -23,7 +23,7 @@ $re"
 ############################# runtime-tests ############################
 if [[ -f /tmp/firstboot-done ]]; then
   input="$(cat /tmp/firstboot-done)"
-else 
+else
   [[ "$(flatpak remotes | grep -q fedora; echo $?)" -eq 0 ]] || { echo "${yw}Warning:$re Firstboot already ran"; exit 0; }
 fi
 
@@ -48,7 +48,7 @@ case $input in
     if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 0 failed"; exit 1; fi
     echo 1 > /tmp/firstboot-done
     ;&
-  1) echo "${be}Info:$re Step 1, Removing Filtered Flathub Repository"                                      
+  1) echo "${be}Info:$re Step 1, Removing Filtered Flathub Repository"
     if [[ "$(flatpak remotes | grep -q flathub; echo $?)" -eq 0 ]]; then
       sudo -S /usr/bin/flatpak remote-delete flathub --force <<< "$password"
       if [ "$?" != 0 ] ; then echo "${rd}Error:$re Step 1 failed"; exit 1; fi
@@ -148,10 +148,10 @@ Did you run the commands? [y/n] "
     echo 11 > /tmp/firstboot-done
     ;&
   11) echo "${be}Info:$re The rest of the installation process requires user input to configure, please be present. To proceed please press <y>."
-    read a2                                                                         
-    while [[ $a2 != "y" ]]; do                                                      
-      echo "${yw}Warning:$re Prompt requires a 'y'. "; read a2                      
-    done  
+    read a2
+    while [[ $a2 != "y" ]]; do
+      echo "${yw}Warning:$re Prompt requires a 'y'. "; read a2
+    done
     extensionsCount=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml | wc -l)
     echo "${be}Info:$re Step 11, Installing $extensionsCount Extensions from Recipe"
     extensions=$(yq '.extensions[]' < /usr/share/cloud-os/cloud-os-just/recipe.yml)
