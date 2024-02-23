@@ -5,7 +5,9 @@ flatpaks:
   - org.gnome.seahorse.Application
   - com.mattjakeman.ExtensionManager
   - org.gustavoperedo.FontDownloader
+  - com.github.finefindus.eyedropper
   - org.ferdium.Ferdium
+  - info.mumble.Mumble
   - com.brave.Browser
   - net.mullvad.MullvadBrowser
   - io.gitlab.librewolf-community
