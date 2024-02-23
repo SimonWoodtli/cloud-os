@@ -8,7 +8,9 @@ declare bo=$'\033[1m'
 declare re=$'\033[0m'
 
 declare -a mnt=("2ndHDD" "2TB-HDD" "usb-luks" "usb-ntfs")
-declare -a Containers=("2TBHDD" "pcloudFiles" "pcloudMorefiles")
+declare -a Containers=("syncthing")
+declare -a Cloud=("pcloudFiles" "pcloudMorefiles")
+declare -a Sync=("phone")
 declare -i major=${BASH_VERSION:0:1}
 declare input="0"
 declare -i i=0
@@ -162,21 +164,27 @@ Did you run the commands? [y/n] "
     ;;
   12) echo "${be}Info:$re Step 11, create Dirs"
     [[ $(whoami) == "xnasero" ]] || exit 0
-    mkdir -p $HOME/VirtualMachines $HOME/Repos/github.com/SimonWoodtli/{myrepos,webdev}
+    mkdir -p "$HOME"/Repos/github.com/SimonWoodtli/{myrepos,webdev} "$HOME/Torrents"
     for x in "${Containers[@]}"; do mkdir -p "$HOME/Containers/$x"; done
+    for x in "${Cloud[@]}"; do mkdir -p "$HOME/Cloud/$x"; done
+    for x in "${Sync[@]}"; do mkdir -p "$HOME/Sync/$x"; done
     for x in "${mnt[@]}"; do sudo -S mkdir -p "/mnt/$x" <<< "$password"; done
     ##mnt has root ownership that is annoying to deal with any devices, so I changed it to current user
     sudo chown -R `whoami`:`whoami` /mnt
     ## seperate data dirs from OS hdd, so dealing with it becomes a bit more convenient
     rm -rf $HOME/{Documents,Pictures,Templates,Videos}
-    ## cause workspace container has no access to /mnt/2ndHDD but /run/host/var/mnt/2ndHDD
-    folder="/run/host/var/mnt/2ndHDD"
+    ## cause workspace container has no access to /var/mnt/2ndHDD but /run/host/var/mnt/2ndHDD
+    folder="/var/mnt/2ndHDD"
     ##TEST: not sure if symlinking from host will work. SO later symlinks
     ##work correct for host and workspace, if not working run symlink cmds from within container
+    ln -sf "$folder/Backups" "$HOME/Backups"
     ln -sf "$folder/Documents" "$HOME/Documents"
+    ln -sf "$folder/Music" "$HOME/Music"
     ln -sf "$folder/Pictures" "$HOME/Pictures"
+    ln -sf "$folder/Public" "$HOME/Public"
     ln -sf "$folder/Templates" "$HOME/Templates"
     ln -sf "$folder/Videos" "$HOME/Videos"
+    ln -sf "$folder/VirtualMachines" "$HOME/VirtualMachines"
     echo 12 > /tmp/firstboot-done
     ;&
   13) echo "${be}Info:$re Step 12, Enabling auto-mount devices"
@@ -184,7 +192,7 @@ Did you run the commands? [y/n] "
     sudo -S sh -c 'printf "%s\n" "LABEL=usb-ntfs /mnt/usb-ntfs ntfs-3g defaults,nls=utf8,umask=000,dmask=027,fmask=137,uid=1000,gid=1000 0 2" >> /etc/fstab' <<< "$password"
     sudo -S sh -c 'printf "%s\n" "usb-luks LABEL=crypto-usb none nofail" >> /etc/crypttab' <<< "$password"
     sudo -S sh -c 'printf "%s\n" "LABEL=2ndHDD /mnt/2ndHDD ext4 defaults 0 2" >> /etc/fstab' <<< "$password"
-    sudo -S sh -c 'printf "%s\n" "2ndHDD LABEL=crypto-2ndHDD none" >> /etc/crypttab' <<< "$password"
+    sudo -S sh -c 'printf "%s\n" "2ndHDD LABEL=crypto-2ndHDD none nofail,discard" >> /etc/crypttab' <<< "$password"
     echo 13 > /tmp/firstboot-done
     ;&
   14) echo "${be}Info:$re Step 13, Cloning Repos"
