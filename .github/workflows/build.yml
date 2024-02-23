@@ -8,6 +8,8 @@ on:
     paths-ignore:
       - '**.md'
       - '**.txt'
+  workflow_dispatch:
+
 env:
     SOURCE_IMAGE: silverblue
     IMAGE_MAJOR_VERSION: 38
