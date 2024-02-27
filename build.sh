@@ -48,3 +48,8 @@ else
 fi
 
 pip install --prefix=/usr gnome-extensions-cli
+
+#Install mw
+git clone https://github.com/LukeSmithxyz/mutt-wizard
+cd mutt-wizard
+sudo make install

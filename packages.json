@@ -68,7 +68,13 @@
         "playerctl",
         "mpd",
         "mpc",
-        "ncmpcpp"
+        "ncmpcpp",
+        "neomutt",
+        "isync",
+        "msmtp",
+        "notmuch",
+        "abook",
+        "urlview"
         ],
      "exclude": [
         "libavcodec-free",
