@@ -40,6 +40,14 @@ just firstboot
   basis
 * Hosted on ghcr.io
 
+## Upgrade
+
+> 🧐 The reason we don't need to use `rpm-ostree rebase` is because it is
+> already pointing to cloud-os:latest
+
+To upgrade to the latest Fedora Version: `sudo rpm-ostree upgrade` (may also be
+used to just fetch the latest published version of cloud-os)
+
 ![Alt](https://repobeats.axiom.co/api/embed/fa9e3f63018894aee1a032e23926a68beb110808.svg "Repobeats analytics image")
 
 [workspace]: <https://github.com/SimonWoodtli/workspace-alpine>
@@ -48,3 +56,6 @@ just firstboot
 Related:
 
 * <https://github.com/ublue-os>
+* <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/composing_installing_and_managing_rhel_for_edge_images/edge-terminology-and-commands_composing-installing-managing-rhel-for-edge-images>
+* <https://docs.fedoraproject.org/en-US/fedora-silverblue/_attachments/silverblue-cheatsheet.pdf>
+* <https://docs.fedoraproject.org/en-US/fedora-silverblue/updates-upgrades-rollbacks/>
