@@ -1,6 +1,6 @@
 default:
   @just --list
-    
+
 firstboot:
   firstboot
 
@@ -13,7 +13,12 @@ changelogs:
 distrobox-alpine:
   echo 'Creating Alpine distrobox ...'
   distrobox create --image quay.io/toolbx-images/alpine-toolbox:edge -n alpine -Y
-  distrobox enter alpine 
+  distrobox enter alpine
+
+distrobox-arch:
+  echo 'Creating Arch distrobox ...'
+  distrobox create --image quay.io/toolbx-images/archlinux-toolbox -n arch -Y
+  distrobox enter arch
 
 distrobox-debian:
   echo 'Creating Debian distrobox ...'
@@ -22,14 +27,14 @@ distrobox-debian:
 
 distrobox-opensuse:
   echo 'Creating openSUSE distrobox ...'
-  distrobox create --image quay.io/toolbx-images/opensuse-toolbox:tumbleweed -n opensuse -Y
+  distrobox create --image quay.io/toolbx-images/opensuse-toolbox -n opensuse -Y
   distrobox enter opensuses
- 
+
 distrobox-ubuntu:
   echo 'Creating Ubuntu distrobox ...'
-  distrobox create --image quay.io/toolbx-images/ubuntu-toolbox:22.04 -n ubuntu -Y
+  distrobox create --image quay.io/toolbx-images/ubuntu-toolbox -n ubuntu -Y
   distrobox enter ubuntu
- 
+
 update:
   rpm-ostree update
   flatpak update -y
