@@ -13,6 +13,7 @@ flatpaks:
   - io.gitlab.librewolf-community
   - org.gimp.GIMP
   - com.jgraph.drawio.desktop
+  - com.raggesilver.BlackBox
   - net.ankiweb.Anki
   - com.calibre_ebook.calibre
   - com.valvesoftware.Steam
