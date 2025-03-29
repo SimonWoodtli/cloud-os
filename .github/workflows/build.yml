@@ -12,7 +12,7 @@ on:
 
 env:
     SOURCE_IMAGE: silverblue
-    IMAGE_MAJOR_VERSION: 39
+    IMAGE_MAJOR_VERSION: 41
     IMAGE_NAME: ${{ github.event.repository.name }}
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
     REGISTRY_USER: ${{ github.actor }}
