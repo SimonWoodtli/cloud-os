@@ -15,6 +15,7 @@ systemctl enable pcscd
 systemctl enable ydotool
 fc-cache -f /usr/share/fonts #FIXME not sure if not a folder needs to be specified, gotta test
 
-#FIXME can't find file maybe fedora 41 changed location?
+#FIXME can't find file maybe fedora 41 changed location? Or maybe these
+#files get manipulated somewhere during the building process (I forgot keke)
 #sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf
-sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf
+#sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf
