@@ -86,6 +86,7 @@
         "libpostproc-free",
         "libswresample-free",
         "libswscale-free",
+        "ffmpeg-free",
         "mesa-va-drivers",
         "opensc",
         "firefox",
