@@ -21,6 +21,7 @@
         "distrobox",
         "just",
         "fzf",
+        "procs",
         "tealdeer",
         "vim",
         "tmux",
@@ -86,6 +87,7 @@
         "libswresample-free",
         "libswscale-free",
         "mesa-va-drivers",
+        "opensc",
         "firefox",
         "firefox-langpacks",
         "gnome-software-rpm-ostree"

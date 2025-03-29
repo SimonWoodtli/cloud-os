@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -ouex pipefail
-
+##TODO install ctop via 'packages.json' once available on Fedora
 systemctl enable rpm-ostreed-automatic.timer
 systemctl enable flatpak-system-update.timer
 systemctl --global enable flatpak-user-update.timer

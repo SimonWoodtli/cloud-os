@@ -27,7 +27,9 @@ flatpaks:
   - fr.romainvigier.MetadataCleaner
   - re.sonny.Workbench
   - org.gnome.Boxes
+  - org.gnome.gitlab.somas.Apostrophe
   - fr.handbrake.ghb
+  - com.github.miguelmota.Cointop
   - org.qbittorrent.qBittorrent
   - io.mpv.Mpv
   - com.spotify.Client
